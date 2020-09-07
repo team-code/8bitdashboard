@@ -1,3 +1,11 @@
+function main() {
+    setRandomImage();
+
+    gettime("clock");
+    time = setInterval(gettime, 5000);
+    shortcuts();
+}
+
 function getRandomImage() {
     imgnumber = Math.floor(Math.random() * images.length);
     return images[imgnumber];
@@ -29,14 +37,6 @@ function previousImage() {
     setImageNum(imgnumber);
 }
 
-
-function main() {
-    setRandomImage();
-
-    gettime("clock");
-    time = setInterval(gettime, 5000);
-    shortcuts();
-}
 
 function shortcuts() {
     document.addEventListener('keydown', function (event) {
