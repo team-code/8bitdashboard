@@ -34,12 +34,13 @@ function getRandomImage() {
         '../img/kirokaze/youngatnight.gif',
         '../img/kirokaze/zombies.gif'
     ];
-    return images[Math.floor(Math.random()*images.length)];
+    return images[Math.floor(Math.random() * images.length)];
 }
 
-function main(){
-    const img_url = getRandomImage();
-    document.getElementById("background").style.backgroundImage = "url("+img_url+")";
+
+function main() {
+    var img_url = getRandomImage();
+    document.getElementById("background").style.backgroundImage = "url('" + img_url + "')";
     gettime("clock");
     setInterval(gettime("clock"), 5000);
 }
