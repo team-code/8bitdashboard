@@ -2,28 +2,14 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
-        <style>
-            body, html {
-              height: 100%;
-              margin: 0;
-            }
-            
-            .bg {
-              /* The image used */
-              background-image: url("../img/kirokaze/amp_prob.gif");
-            
-              /* Full height */
-              height: 100%; 
-            
-              /* Center and scale the image nicely */
-              background-position: center;
-              background-repeat: no-repeat;
-              background-size: cover;
-            }
-            </style>
+        <title>8 Bit Dashboard</title>
+        <script src="../js/clock.js"></script>
+        <script src="../js/main.js"></script>
+        <link rel="stylesheet" href="../css/main.css">
     </head>
-    <body>
-        <div class="bg"></div>
+    <body onload="main()">
+    <div id="background">
+        <div id="clock"></div>
+    </div>
     </body>
 </html>
