@@ -7,10 +7,3 @@ function getRandomImage() {
     ];
     return images[Math.floor(Math.random()*images.length)];
 }
-
-
-function main(){
-    var img_url = getRandomImage();
-    document.getElementById("background").style.backgroundimage = "url('"+img_url+"')";
-    gettime("clock");
-}
