@@ -20,15 +20,14 @@
     position: absolute;
     top: 50%;
     left: 50%;
-}
-
-
-#clock {
     width: 210px;
     height: 60px;
     color: white;
     font-size: 3em;
+
+    text-shadow: 2px 2px 1px black;
 }
+
 
 body, html {
     font-family: minecraft;
