@@ -1,10 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script>
+            function getRandomImage() {
+                const images = [
+                    '../img/kirokaze/amp_prob.gif',
+                    '../img/kirokaze/attack.gif',
+                    '../img/kirokaze/bad_landing.gif',
+                    '../img/kirokaze/bluebalcony.gif'
+                ];
+                return images[Math.floor(Math.random()*images.length)];
+            }
+            function showImage(){
+                const img_url = getRandomImage();
+                document.write('<div style="background: rgba(0, 0, 0, 0) url("'+img_url+'") no-repeat fixed center center / cover;background-color: rgba(0, 0, 0, 0);background-position-x: center;background-position-y: center;background-repeat: no-repeat;background-attachment: fixed;background-image: url("'+img_url+'");background-size: cover;background-origin: padding-box;background-clip: border-box;">');
+            }
+        </script>
+        <style>
+            #image {
+                /* width: 100%;
+                height: auto;
+                position: fixed;
+                top: 0;
+                left: 0; */
+                
+            }
+        </style>
+    </head>
+    <body>
+        <script>showImage();</script>
+    </body>
 </html>
