@@ -11,6 +11,6 @@ function getRandomImage() {
 
 function main(){
     var img_url = getRandomImage();
-    document.getElementById("background").style.backgroundimage = "url('"+img_url+"')";
+    document.getElementById("background").style.backgroundImage = "url('"+img_url+"')";
     gettime("clock");
 }
