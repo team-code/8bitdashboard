@@ -5,13 +5,13 @@ function getRandomImage() {
         '../img/kirokaze/bad_landing.gif',
         '../img/kirokaze/bluebalcony.gif'
     ];
-    return images[Math.floor(Math.random()*images.length)];
+    return images[Math.floor(Math.random() * images.length)];
 }
 
 
-function main(){
+function main() {
     var img_url = getRandomImage();
-    document.getElementById("background").style.backgroundImage = "url('"+img_url+"')";
+    document.getElementById("background").style.backgroundImage = "url('" + img_url + "')";
     gettime("clock");
-    setInterval(gettime("clock"),5000);
+    setInterval(gettime("clock"), 5000);
 }
