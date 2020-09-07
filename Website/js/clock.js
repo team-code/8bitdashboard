@@ -1,6 +1,6 @@
-function gettime(div) {
+function gettime() {
     let time = new Date();
-    document.getElementById(div).innerHTML = time.toLocaleString('en-US', {
+    document.getElementById("clock").innerHTML = time.toLocaleString('en-US', {
         hour: 'numeric',
         minute: 'numeric',
         hour12: true

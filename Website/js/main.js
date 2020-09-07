@@ -1,3 +1,4 @@
+var time;
 function getRandomImage() {
     const images = [
         '../img/kirokaze/amp_prob.gif',
@@ -42,5 +43,5 @@ function main() {
     var img_url = getRandomImage();
     document.getElementById("background").style.backgroundImage = "url('" + img_url + "')";
     gettime("clock");
-    setInterval(gettime("clock"), 5000);
+    time = setInterval(gettime, 5000);
 }
