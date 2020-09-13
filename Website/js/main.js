@@ -1,6 +1,6 @@
 function main() {
     setRandomImage();
-    let cur_time = gettime("clock");
+    let cur_time = gettime();
     getgreeting(cur_time);
     time = setInterval(gettime, 5000);
     shortcuts();
