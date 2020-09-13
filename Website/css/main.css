@@ -13,26 +13,32 @@
 }
 
 #clock {
-    margin: -5% 0 0 -15%;
+    margin: 5%;
     text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 30%;
-    height: 10%;
+    position: relative;
+    top: 10%;
+    width: 90%;
     color: white;
     font-size: 5vw;
     text-shadow: 2px 2px 1px black;
 }
 
-#greeting {
-    margin: -5% 0 0 -15%;
-    text-align: center;
+#holder {
+    margin: -15% 0 0 -20%;
     position: absolute;
-    top: 65%;
-    left: 40%;
-    width: 50%;
-    height: 10%;
+    top: 50%;
+    left: 50%;
+    width: 40%;
+    height: 30%;
+}
+
+
+#greeting {
+    margin: 5%;
+    text-align: center;
+    position: relative;
+    top: 10%;
+    width: 90%;
     color: white;
     font-size: 2vw;
     text-shadow: 2px 2px 1px black;
