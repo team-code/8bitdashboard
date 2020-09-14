@@ -12,12 +12,13 @@ function getRandomImage() {
 }
 
 function setRandomImage() {
-    document.getElementById("background").style.backgroundImage = "url('" + getRandomImage() + "')";
+    image = getRandomImage();
+    document.getElementById("showcase").style.backgroundImage = "url('" + image + "')";
 }
 
 function setImageNum(Num) {
     if (Num < numberofimgs && Num > 0) {
-        document.getElementById("background").style.backgroundImage = "url('" + images[Num] + "')";
+        document.getElementById("showcase").style.backgroundImage = "url('" + images[Num] + "')";
     }
 }
 
@@ -172,5 +173,6 @@ const images = [
 ];
 
 var time;
+var image;
 var imgnumber;
 var numberofimgs = images.length;

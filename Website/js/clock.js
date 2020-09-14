@@ -7,4 +7,3 @@ function gettime() {
     });
     return time;
 }
-

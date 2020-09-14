@@ -3,50 +3,46 @@
     src: url('../font/minecraftfont.woff2');
 }
 
-#background {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-#clock {
-    margin: 5%;
-    text-align: center;
-    position: relative;
-    top: 10%;
-    width: 90%;
-    color: white;
-    font-size: 5vw;
-    text-shadow: 2px 2px 1px black;
-}
-
-#holder {
-    margin: -10% 0 0 -20%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 40%;
-    height: 30%;
-}
-
-
-#greeting {
-    margin: 5%;
-    text-align: center;
-    position: relative;
-    top: 10%;
-    width: 90%;
-    color: white;
-    font-size: 2vw;
-    text-shadow: 2px 2px 1px black;
-}
-
-body, html {
+* {
     font-family: minecraft;
     margin: 0;
     padding: 0;
-    height: 100%;
+}
+
+#showcase {
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 1em;
+}
+
+#author, #settings {
+    position: fixed;
+    bottom: 1em;
+    color: white;
+}
+
+#author {
+    left: 1em;
+}
+
+#settings {
+    right: 1em;
+}
+
+#showcase #clock {
+    font-size: 4em;
+    color: white;
+    text-shadow: 2px 2px 1px black;
+}
+
+#showcase #greeting {
+    font-size: 2em;
+    color: white;
+    text-shadow: 2px 2px 1px black;
 }
