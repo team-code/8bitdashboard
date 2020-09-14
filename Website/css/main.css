@@ -1,7 +1,7 @@
 @font-face {
     font-family: minecraft;
     src: url('../font/minecraftfont.woff2');
-}
+} 
 
 * {
     font-family: minecraft;
