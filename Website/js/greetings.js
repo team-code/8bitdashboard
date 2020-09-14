@@ -1,20 +1,34 @@
 function getgreeting(cur_time) {
-    const greetings = [
+    const morning_greetings = [
         'Good Morning',
+        'Rise and Shine'
+    ];
+    const afternoon_greetings = [
         'Good Afternoon',
+        'Out to Lunch'
+    ];
+    const evening_greeting = [
         'Good Evening',
-        'Good Night'
+        'Packing up Work'
+    ];
+    const night_greetings = [
+        'Good Night',
+        'Time for Bed'
     ];
     let hour = cur_time.getHours();
     let greeting;
     if (hour >= 6 && hour <= 11) {
-        greeting = greetings[0]
+        const greeting_num = Math.floor(Math.random() * morning_greetings.length);
+        greeting = morning_greetings[greeting_num]
     } else if (hour >= 12 && hour <= 16) {
-        greeting = greetings[1];
+        const greeting_num = Math.floor(Math.random() * afternoon_greetings.length);
+        greeting = afternoon_greetings[greeting_num]
     } else if (hour >= 17 && hour <= 22) {
-        greeting = greetings[2];
-    } else if (hour >= 23 && hour <= 5) {
-        greeting = greetings[3];
+        const greeting_num = Math.floor(Math.random() * evening_greeting.length);
+        greeting = evening_greeting[greeting_num]
+    } else if (hour >= 23 || hour <= 5) {
+        const greeting_num = Math.floor(Math.random() * night_greetings.length);
+        greeting = night_greetings[greeting_num]
     }
     document.getElementById("greeting").innerHTML = greeting;
 }
