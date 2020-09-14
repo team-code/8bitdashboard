@@ -1,7 +1,7 @@
 function main() {
     setRandomImage();
-
-    gettime("clock");
+    let cur_time = gettime();
+    getgreeting(cur_time);
     time = setInterval(gettime, 5000);
     shortcuts();
 }
@@ -37,7 +37,6 @@ function previousImage() {
     setImageNum(imgnumber);
 }
 
-
 function shortcuts() {
     document.addEventListener('keydown', function (event) {
         console.log(event.key);
@@ -60,7 +59,6 @@ function shortcuts() {
 function openlink(link, tab) {
     window.open(link, tab);
 }
-
 
 const shortcutmap = new Map([
     ['g', "https://www.github.com"],
@@ -172,7 +170,6 @@ const images = [
     '../img/valenberg/tv.gif',
     '../img/valenberg/virtuaverse.gif'
 ];
-
 
 var time;
 var imgnumber;

@@ -5,5 +5,6 @@ function gettime() {
         minute: 'numeric',
         hour12: true
     });
+    return time;
 }
 
