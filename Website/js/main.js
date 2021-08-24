@@ -1,4 +1,123 @@
+var shortcutmap = new Map([
+    ['g', "https://www.github.com"],
+    ['r', "https://www.reddit.com"],
+    ['f', "https://www.facebook.com"],
+    ['y', "https://www.youtube.com"],
+    ['m', "https://maps.google.com"],
+    ['s', "https://www.openstreetmap.org/"],
+    ['w', "https://www.wikipedia.com"],
+    ['b', "https://www.bing.com"],
+    ['t', "https://www.twitter.com"],
+    ['d', "https://www.twitch.tv/"],
+    ['e', "https://www.ebay.com"],
+    ['a', "https://www.amazon.com"],
+    ['o', "https://www.google.com"],
+    ['p', "https://www.plex.tv/web"]
+])
+const artists = [
+    ["kirokaze","https://www.patreon.com/kirokaze"],
+    ["faxdoc", "https://twitter.com/faxdocc"],
+    ["Mark Ferrari", "http://pixfabrik.com/livingworlds/"],
+    ["Valenberg", "https://twitter.com/MrValenberg"]
+]
+
+const images = [
+    ['../img/kirokaze/amp_prob.gif',0],
+    ['../img/kirokaze/attack.gif',0],
+    ['../img/kirokaze/bad_landing.gif',0],
+    ['../img/kirokaze/bluebalcony.gif',0],
+    ['../img/kirokaze/cemetry.gif',0],
+    ['../img/kirokaze/citymirror.gif',0],
+    ['../img/kirokaze/coffeeinrain.gif',0],
+    ['../img/kirokaze/dark_pillar.gif',0],
+    ['../img/kirokaze/droidcrime.gif',0],
+    ['../img/kirokaze/elderorc.gif',0],
+    ['../img/kirokaze/factory5.gif',0],
+    ['../img/kirokaze/familydinner.gif',0],
+    ['../img/kirokaze/horse.gif',0],
+    ['../img/kirokaze/iplayoldgames.gif',0],
+    ['../img/kirokaze/last_dance.gif',0],
+    ['../img/kirokaze/metro_final.gif',0],
+    ['../img/kirokaze/nightlytraining.gif',0],
+    ['../img/kirokaze/pilot.gif',0],
+    ['../img/kirokaze/player2.gif',0],
+    ['../img/kirokaze/reddriver.gif',0],
+    ['../img/kirokaze/robot_alley.gif',0],
+    ['../img/kirokaze/sandcastle.gif',0],
+    ['../img/kirokaze/shootingstars.gif',0],
+    ['../img/kirokaze/spacecommander.gif',0],
+    ['../img/kirokaze/spaceport.gif',0],
+    ['../img/kirokaze/thieves.gif',0],
+    ['../img/kirokaze/train.gif',0],
+    ['../img/kirokaze/train_city.gif',0],
+    ['../img/kirokaze/troll_cave.gif',0],
+    ['../img/kirokaze/wild_boy.gif',0],
+    ['../img/kirokaze/windyday.gif',0],
+    ['../img/kirokaze/youngatnight.gif',0],
+    ['../img/kirokaze/zombies.gif',0],
+    ['../img/faxdoc/cacao_and_coffee_shop.gif',1],
+    ['../img/faxdoc/youngatnight.gif',1],
+    ['../img/faxdoc/flower_shop.gif',1],
+    ['../img/faxdoc/lullaby.gif',1],
+    ['../img/faxdoc/midnight_melancholy.gif',1],
+    ['../img/faxdoc/mountain_mote.gif',1],
+    ['../img/faxdoc/nero_land.gif',1],
+    ['../img/faxdoc/sideshop.gif',1],
+    ['../img/faxdoc/stacking_houses_on_a_windy_day.gif',1],
+    ['../img/landscapes/bridge.gif',2],
+    ['../img/landscapes/bridge_raining.gif',2],
+    ['../img/landscapes/castle.gif',2],
+    ['../img/landscapes/cave.gif',2],
+    ['../img/landscapes/coast.gif',2],
+    ['../img/landscapes/dawn.gif',2],
+    ['../img/landscapes/falls.gif',2],
+    ['../img/landscapes/fire.gif',2],
+    ['../img/landscapes/forrest.gif',2],
+    ['../img/landscapes/fortress.gif',2],
+    ['../img/landscapes/grandcanyon.gif',2],
+    ['../img/landscapes/lake.gif',2],
+    ['../img/landscapes/mountain.gif',2],
+    ['../img/landscapes/nature.gif',2],
+    ['../img/landscapes/northlights.gif',2],
+    ['../img/landscapes/rain.gif',2],
+    ['../img/landscapes/sea.gif',2],
+    ['../img/landscapes/snow.gif',2],
+    ['../img/landscapes/swamp.gif',2],
+    ['../img/landscapes/swirling.gif',2],
+    ['../img/landscapes/temple.gif',2],
+    ['../img/landscapes/tower.gif',2],
+    ['../img/landscapes/town.gif',2],
+    ['../img/landscapes/underwater.gif',2],
+    ['../img/valenberg/bicycle.gif',3],
+    ['../img/valenberg/blade.gif',3],
+    ['../img/valenberg/controlroom.gif',3],
+    ['../img/valenberg/daftpunk.gif',3],
+    ['../img/valenberg/drift.gif',3],
+    ['../img/valenberg/echoesfromneals.gif',3],
+    ['../img/valenberg/exodus.gif',3],
+    ['../img/valenberg/future.gif',3],
+    ['../img/valenberg/girlinrain.gif',3],
+    ['../img/valenberg/highfloor.gif',3],
+    ['../img/valenberg/highlands.gif',3],
+    ['../img/valenberg/highsoceity.gif',3],
+    ['../img/valenberg/jazznight.gif',3],
+    ['../img/valenberg/lowlands.gif',3],
+    ['../img/valenberg/moon.png',3],
+    ['../img/valenberg/motorcycle.gif',3],
+    ['../img/valenberg/nighttrain.gif',3],
+    ['../img/valenberg/redbicycle.gif',3],
+    ['../img/valenberg/ride.gif',3],
+    ['../img/valenberg/shop.gif',3],
+    ['../img/valenberg/skate.gif',3],
+    ['../img/valenberg/streets.gif',3],
+    ['../img/valenberg/sushi.gif',3],
+    ['../img/valenberg/tv.gif',3],
+    ['../img/valenberg/virtuaverse.gif',3]
+];
+
+
 function main() {
+    setUpModal();
     setRandomImage();
     let cur_time = gettime();
     getgreeting(cur_time);
@@ -13,13 +132,21 @@ function getRandomImage() {
 
 function setRandomImage() {
     image = getRandomImage();
-    document.getElementById("showcase").style.backgroundImage = "url('" + image + "')";
+    document.getElementById("showcase").style.backgroundImage = "url('" + image[0] + "')";
+    updateArtistAttr(image);
 }
 
 function setImageNum(Num) {
     if (Num < numberofimgs && Num > 0) {
-        document.getElementById("showcase").style.backgroundImage = "url('" + images[Num] + "')";
+        document.getElementById("showcase").style.backgroundImage = "url('" + images[Num][0] + "')";
+        updateArtistAttr(images[Num]);
     }
+}
+
+function updateArtistAttr(imageObj){
+    artists_id = imageObj[1]
+    document.getElementById("author").innerHTML = artists[artists_id][0];
+    document.getElementById("author").href = artists[artists_id][1];
 }
 
 function nextImage() {
@@ -58,121 +185,74 @@ function shortcuts() {
 }
 
 function openlink(link, tab) {
-    window.open(link, tab);
+    if(!modalactive){
+        window.open(link, tab);
+    }
+
 }
 
-const shortcutmap = new Map([
-    ['g', "https://www.github.com"],
-    ['r', "https://www.reddit.com"],
-    ['f', "https://www.facebook.com"],
-    ['y', "https://www.youtube.com"],
-    ['m', "https://maps.google.com"],
-    ['s', "https://www.openstreetmap.org/"],
-    ['w', "https://www.wikipedia.com"],
-    ['b', "https://www.bing.com"],
-    ['t', "https://www.twitter.com"],
-    ['d', "https://www.twitch.tv/"],
-    ['e', "https://www.ebay.com"],
-    ['a', "https://www.amazon.com"],
-    ['o', "https://www.google.com"],
-    ['p', "https://www.plex.tv/web"]
-])
+function add_shortcut(key,site){
+    shortcutmap.set(key, site);
+}
 
-const images = [
-    '../img/kirokaze/amp_prob.gif',
-    '../img/kirokaze/attack.gif',
-    '../img/kirokaze/bad_landing.gif',
-    '../img/kirokaze/bluebalcony.gif',
-    '../img/kirokaze/cemetry.gif',
-    '../img/kirokaze/citymirror.gif',
-    '../img/kirokaze/coffeeinrain.gif',
-    '../img/kirokaze/dark_pillar.gif',
-    '../img/kirokaze/droidcrime.gif',
-    '../img/kirokaze/elderorc.gif',
-    '../img/kirokaze/factory5.gif',
-    '../img/kirokaze/familydinner.gif',
-    '../img/kirokaze/horse.gif',
-    '../img/kirokaze/iplayoldgames.gif',
-    '../img/kirokaze/last_dance.gif',
-    '../img/kirokaze/metro_final.gif',
-    '../img/kirokaze/nightlytraining.gif',
-    '../img/kirokaze/pilot.gif',
-    '../img/kirokaze/player2.gif',
-    '../img/kirokaze/reddriver.gif',
-    '../img/kirokaze/robot_alley.gif',
-    '../img/kirokaze/sandcastle.gif',
-    '../img/kirokaze/shootingstars.gif',
-    '../img/kirokaze/spacecommander.gif',
-    '../img/kirokaze/spaceport.gif',
-    '../img/kirokaze/thieves.gif',
-    '../img/kirokaze/train.gif',
-    '../img/kirokaze/train_city.gif',
-    '../img/kirokaze/troll_cave.gif',
-    '../img/kirokaze/wild_boy.gif',
-    '../img/kirokaze/windyday.gif',
-    '../img/kirokaze/youngatnight.gif',
-    '../img/kirokaze/zombies.gif',
-    '../img/faxdoc/cacao_and_coffee_shop.gif',
-    '../img/faxdoc/youngatnight.gif',
-    '../img/faxdoc/flower_shop.gif',
-    '../img/faxdoc/lullaby.gif',
-    '../img/faxdoc/midnight_melancholy.gif',
-    '../img/faxdoc/mountain_mote.gif',
-    '../img/faxdoc/nero_land.gif',
-    '../img/faxdoc/sideshop.gif',
-    '../img/faxdoc/stacking_houses_on_a_windy_day.gif',
-    '../img/landscapes/bridge.gif',
-    '../img/landscapes/bridge_raining.gif',
-    '../img/landscapes/castle.gif',
-    '../img/landscapes/cave.gif',
-    '../img/landscapes/coast.gif',
-    '../img/landscapes/dawn.gif',
-    '../img/landscapes/falls.gif',
-    '../img/landscapes/fire.gif',
-    '../img/landscapes/forrest.gif',
-    '../img/landscapes/fortress.gif',
-    '../img/landscapes/grandcanyon.gif',
-    '../img/landscapes/lake.gif',
-    '../img/landscapes/mountain.gif',
-    '../img/landscapes/nature.gif',
-    '../img/landscapes/northlights.gif',
-    '../img/landscapes/rain.gif',
-    '../img/landscapes/sea.gif',
-    '../img/landscapes/snow.gif',
-    '../img/landscapes/swamp.gif',
-    '../img/landscapes/swirling.gif',
-    '../img/landscapes/temple.gif',
-    '../img/landscapes/tower.gif',
-    '../img/landscapes/town.gif',
-    '../img/landscapes/underwater.gif',
-    '../img/valenberg/bicycle.gif',
-    '../img/valenberg/blade.gif',
-    '../img/valenberg/controlroom.gif',
-    '../img/valenberg/daftpunk.gif',
-    '../img/valenberg/drift.gif',
-    '../img/valenberg/echoesfromneals.gif',
-    '../img/valenberg/exodus.gif',
-    '../img/valenberg/future.gif',
-    '../img/valenberg/girlinrain.gif',
-    '../img/valenberg/highfloor.gif',
-    '../img/valenberg/highlands.gif',
-    '../img/valenberg/highsoceity.gif',
-    '../img/valenberg/jazznight.gif',
-    '../img/valenberg/lowlands.gif',
-    '../img/valenberg/moon.png',
-    '../img/valenberg/motorcycle.gif',
-    '../img/valenberg/nighttrain.gif',
-    '../img/valenberg/redbicycle.gif',
-    '../img/valenberg/ride.gif',
-    '../img/valenberg/shop.gif',
-    '../img/valenberg/skate.gif',
-    '../img/valenberg/streets.gif',
-    '../img/valenberg/sushi.gif',
-    '../img/valenberg/tv.gif',
-    '../img/valenberg/virtuaverse.gif'
-];
+function settingsModelContent(){
+
+    let html_to_insert = ""
+
+
+    shortcutmap.forEach((value, key) => { html_to_insert += "<input value='"+key+"' class='shortcutkey'> <input value='"+value+"' class='shortcutvalue'>" } )
+    document.getElementById("modaltext").innerHTML = html_to_insert;
+
+}
+
+function helpModelContent(){
+    document.getElementById("modaltext").innerText = "Help";
+}
+
+
+function setUpModal() {
+
+
+// Get the modal
+    modal = document.getElementById("myModal");
+
+
+// Get the <span> element that closes the modal
+    span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+    document.getElementById("settings").onclick = function () {
+        modal.style.display = "block";
+        settingsModelContent();
+        modalactive = true;
+    }
+
+    document.getElementById("help").onclick = () => {
+        modal.style.display = "block";
+        helpModelContent();
+        modalactive = true;
+    }
+
+
+// When the user clicks on <span> (x), close the modal
+    span.onclick = () => {
+        modal.style.display = "none";
+        modalactive = false;
+    }
+
+// When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            modalactive = false;
+        }
+    }
+}
+
+
 
 var time;
 var image;
 var imgnumber;
 var numberofimgs = images.length;
+var modalactive = false;
