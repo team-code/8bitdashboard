@@ -156,7 +156,7 @@ const images = [
     ['../img/pixeljeff/datenight.webp',5],
     ['../img/pixeljeff/futurepark.webp',5],
     ['../img/pixeljeff/girlflood.webp',5],
-    ['../img/pixeljeff/hackers.webp',5],
+    ['../img/pixeljeff/hacker.webp',5],
     ['../img/pixeljeff/halloween.webp',5],
     ['../img/pixeljeff/halloweentwo.webp',5],
     ['../img/pixeljeff/icecream.webp',5],
