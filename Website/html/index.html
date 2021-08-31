@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="Description" content="The perfect dashboard. 8-bit Gifs with a clock, bookmark hotkeys, and a greating. Ready to be your startpage!">
+    <meta content="The perfect dashboard. 8-bit Gifs with a clock, bookmark hotkeys, and a greating. Ready to be your startpage!"
+          name="Description">
     <meta charset="UTF-8">
-    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
+    <link href='favicon.ico' rel='shortcut icon' type='image/x-icon'/>
     <title>8 Bit Dashboard</title>
+    <script src="../js/vars.js"></script>
     <script src="../js/clock.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/greetings.js"></script>
-    <link rel="stylesheet" href="../css/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/main.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script src="../js/jscolor.min.js"></script>
+
 </head>
 <body onload="main()">
-    <section id="showcase">
-        <div id="clock"></div>
-        <div id="greeting"></div>
-    </section>
-    <a id="author" target="_blank">author placeholder</a>
-    <a id="settings">Settings</a>
-    <a id="help">Help</a>
+<section id="showcase">
+    <div id="clock"></div>
+    <div id="greeting"></div>
+</section>
+<a id="author" target="_blank">author placeholder</a>
+<a id="settings">Settings</a>
+<a id="help">Help</a>
 
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
+<!-- The Modal -->
+<div class="modal" id="myModal">
 
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modaltext">
-test
-            </div>
-        </div>
+    <!-- Modal content -->
+    <div class="modal-content container" id="modaltext">
+        <span class="close">&times;</span>
 
     </div>
+
+</div>
 </body>
 </html>
