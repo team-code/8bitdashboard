@@ -52,7 +52,7 @@ function setGreeting() {
 
 
 //Returns if its time to change the greeting, also can call set greeting by inself if passed a true
-function timeToChangeGreeting(setGreeting = false){
+function timeToChangeGreeting(setGreetingvar = false){
     let greeting = document.getElementById("greeting").innerText;
     let result = false;
     let time = new Date();
@@ -68,7 +68,7 @@ function timeToChangeGreeting(setGreeting = false){
         result = !night_greetings.includes(greeting);
     }
 
-    if(setGreeting && result){
+    if(setGreetingvar && result){
         setGreeting();
     }
     return result;

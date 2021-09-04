@@ -9,6 +9,10 @@
     padding: 0;
 }
 
+body{
+    background-color: black;
+}
+
 #showcase {
     background-size: cover;
     background-position: center;
@@ -21,7 +25,7 @@
     padding: 0 1em;
 }
 
-#author, #settings, #help {
+#author, #settings, #help, #discord {
     position: fixed;
     bottom: 1em;
     color: white;
@@ -45,6 +49,14 @@
     right: 1em;
 }
 
+#discord{
+    text-decoration: underline;
+    cursor: pointer;
+    right: 12em;
+    text-shadow: 0 0 2px #a6cece;
+    color: #5865F2;
+}
+
 #showcase #clock {
     font-size: 4em;
     color: white;
@@ -57,11 +69,18 @@
     text-shadow: 2px 2px 1px black;
 }
 
+.numinput{
+    width: 20%;
+    min-width: 80px;
+    height: 30px;
+    font-size: 1em;
+    padding-left: 5px;
+}
 
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 15; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -285,6 +304,60 @@ input:checked + .slider:before {
     background-color: #e0e0e0;
 }
 
+/*
+Touch Targets for mobile devices
+ */
+
+#right_touch_target {
+    position: fixed;
+    top: 10%;
+    right: 0;
+    width: 40%;
+    height: 80%;
+    z-index: 10;
+}
+
+#left_touch_target {
+    position: fixed;
+    top: 10%;
+    left: 0;
+    width: 40%;
+    height: 80%;
+    z-index: 10;
+}
+
+/*
+Filters and colors
+ */
+
+.grayscale{
+    filter: grayscale(100%);
+}
+
+.blownout{
+    filter: brightness(200%);
+}
+
+.highcontrast{
+    filter: contrast(150%);
+}
+
+.inverted{
+    filter: invert(100%);
+}
+
+.sepia{
+    filter: sepia(100%);
+}
+
+.lightblur{
+    filter: blur(1px);
+}
+
+.heavyblur{
+    filter: blur(4px);
+}
+
 @media only screen and (max-width: 900px) {
 
     .left-side{
@@ -332,5 +405,12 @@ input:checked + .slider:before {
         height:3em;
     }
 
+}
+
+@media only screen and (max-width: 420px) {
+
+    #author{
+        top:1em
+    }
 
 }

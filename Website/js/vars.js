@@ -1,3 +1,38 @@
+//Settings and vars
+var time;
+var image;
+var img_number;
+var modal_active = false;
+var user_settings = null;
+const local_storage_supported = typeof (Storage) !== "undefined";
+const default_clock_font_size = 4;
+const default_greeting_font_size = 2;
+const app_save_version = 1.1
+const app_version_num = 1.1
+var auto_change_background_active = false;
+var auto_change_background_time = 0;
+
+
+var user_settings_obj = class {
+    constructor(users_shortcuts, save_version = app_save_version, random_seek = false, clock_font_size = 1, greeting_font_size = 1, clock_color = "#FFFFFFFF", greeting_color = "#FFFFFFFF", hide_greetings = false, hide_clock = false, text_shadows = true, clock24hr = false, autochangebackground = false,autochangebackgroundtime = 1) {
+        this.version = save_version;
+        this.random_seek = random_seek;
+        this.clock_font_size = clock_font_size;
+        this.greetingfontsize = greeting_font_size;
+        this.clock_color = clock_color;
+        this.greeting_color = greeting_color;
+        this.hide_greetings = hide_greetings;
+        this.hide_clock = hide_clock;
+        this.text_shadows = text_shadows;
+        this.users_shortcuts = users_shortcuts;
+        this.clock24hr = clock24hr;
+        this.autobackgroundtime = autochangebackgroundtime;
+        this.autochangebackground = autochangebackground;
+    }
+};
+
+
+
 const default_shortcut_map = new Map([
     ['g', "https://www.github.com"],
     ['r', "https://www.reddit.com"],
@@ -14,7 +49,7 @@ const default_shortcut_map = new Map([
     ['o', "https://www.google.com"],
     ['p', "https://www.plex.tv/web"]
 ]);
-
+var background_auto_change_interval = null;
 var user_shortcut_map = default_shortcut_map;
 
 const artists = [
@@ -23,7 +58,8 @@ const artists = [
     ["Mark Ferrari", "http://pixfabrik.com/livingworlds/"],
     ["Valenberg", "https://twitter.com/MrValenberg"],
     ["1041uuu", "https://www.patreon.com/1041uuu"],
-    ["PixelJeff", "https://www.deviantart.com/pixeljeff"]
+    ["PixelJeff", "https://www.deviantart.com/pixeljeff"],
+    ["Minimoss","https://twitter.com/minimossart"]
 ];
 
 const images = [
@@ -178,5 +214,17 @@ const images = [
     ['../img/pixeljeff/streetfood.webp', 5],
     ['../img/pixeljeff/videogame.webp', 5],
     ['../img/pixeljeff/wallcat.webp', 5],
-    ['../img/pixeljeff/zombiethriller.webp', 5]
+    ['../img/pixeljeff/zombiethriller.webp', 5],
+    ['../img/minimoss/city.webp', 6],
+    ['../img/minimoss/moonthief.webp', 6],
+    ['../img/minimoss/ramen.webp', 6],
+    ['../img/minimoss/sanctuary.webp', 6],
+    ['../img/minimoss/shootingstars.webp', 6],
+    ['../img/minimoss/slime.webp', 6],
+    ['../img/minimoss/storm.webp', 6],
+    ['../img/minimoss/zengarden.webp', 6],
+    ['../img/minimoss/zengarden2.webp', 6],
+    ['../img/minimoss/window.webp', 6]
 ];
+
+var number_of_imgs = images.length;

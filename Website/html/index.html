@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta content="The perfect dashboard. 8-bit Gifs with a clock, bookmark hotkeys, and a greating. Ready to be your startpage!"
+    <meta content="The perfect dashboard. 8-bit gifs with a clock, bookmark hotkeys, and a greeting. Ready to be your start page!"
           name="Description">
     <meta charset="UTF-8">
+    <meta property="og:title" content="8 Bit style images as a home page" />
+    <meta property="og:description" content="The perfect dashboard. 8-bit Gifs with a clock, bookmark hotkeys, and a greeting. Ready to be your start page!" />
+    <meta property="og:image" content="https://8bitdashboard.com/img/seo/homepage.png" />
+    <meta property="og:url" content="https://8bitdashboard.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="8Bitdashboard">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link href='favicon.ico' rel='shortcut icon' type='image/x-icon'/>
     <title>8 Bit Dashboard</title>
     <script src="../js/vars.js"></script>
@@ -13,16 +22,22 @@
     <link href="../css/main.css" rel="stylesheet">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <script src="../js/jscolor.min.js"></script>
+    <script src="../js/base2048.js"></script>
 
 </head>
 <body onload="main()">
+<div id="right_touch_target"></div>
+<div id="left_touch_target"></div>
+
+
 <section id="showcase">
     <div id="clock"></div>
     <div id="greeting"></div>
 </section>
-<a id="author" target="_blank">author placeholder</a>
+<a id="author" target="_blank" rel="noreferrer">author placeholder</a>
 <a id="settings">Settings</a>
 <a id="help">Help</a>
+<a id="discord" href="https://discord.gg/VHXyfncHgh">Discord</a>
 
 
 <!-- The Modal -->
