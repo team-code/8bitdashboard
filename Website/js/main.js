@@ -4,9 +4,8 @@
 function main() {
     setUpModal();
     setupUserSettings();
-    applyUserSettings();
     setRandomImage();
-    let cur_time = getSetTime();
+    getSetTime();
     setGreeting();
     time = setInterval(getSetTime, 5000);
     setInterval(timeToChangeGreeting, 5000, true);
@@ -157,7 +156,24 @@ function settingsModelContent() {
     //Insert
     document.getElementById("modaltext").innerHTML = html_to_insert;
 
-    //Change settings
+
+    //Populate functions, colors, and Collapsible functionality
+    jscolor.install();
+
+    span = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = () => {
+        modal.style.display = "none";
+        modal_active = false;
+    }
+    updateCollapsible();
+    updateSettingsSettings();
+
+}
+
+//Updates the settings for the settings modal
+function updateSettingsSettings() {
+//Change settings
     if (!user_settings.hide_greetings) {
         document.getElementById("greetingscheckmark").setAttribute("checked", '')
     }
@@ -180,34 +196,24 @@ function settingsModelContent() {
     document.getElementById("clockfontsize").value = user_settings.clock_font_size;
     document.getElementById("changeminutesinput").value = user_settings.autobackgroundtime;
     document.getElementById("greetingfontsize").value = user_settings.greetingfontsize;
-    //Populate functions, colors, and Collapsible functionality
-    jscolor.install();
 
     //Check to see if it is disabled
-    if(!document.getElementById("autochangebackgroundcheckmark").checked){
+    if (!document.getElementById("autochangebackgroundcheckmark").checked) {
         document.getElementById("autochangeminutesleft").style.display = "none";
         document.getElementById("autochangeminutesright").style.display = "none";
     }
 
     //Add event listener to toggle the change every minutes if it is not enabled
-    document.getElementById("autochangebackgroundcheckmark").addEventListener('change', function() {
-        if(document.getElementById("autochangebackgroundcheckmark").checked){
+    document.getElementById("autochangebackgroundcheckmark").addEventListener('change', function () {
+        if (document.getElementById("autochangebackgroundcheckmark").checked) {
             document.getElementById("autochangeminutesleft").style.display = "block";
             document.getElementById("autochangeminutesright").style.display = "block";
-        }else{
+        } else {
             document.getElementById("autochangeminutesleft").style.display = "none";
             document.getElementById("autochangeminutesright").style.display = "none";
         }
     });
 
-
-    span = document.getElementsByClassName("close")[0];
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = () => {
-        modal.style.display = "none";
-        modal_active = false;
-    }
-    updateCollapsible();
 }
 
 //Inserts the info to the help model
@@ -522,7 +528,7 @@ function autoChangeBackground(override = false, minutes = 1) {
             clearInterval(background_auto_change_interval);
             setInterval(autoChangeBackgroundWorker, interval_time);
             //To Turn off
-        }else if(user_settings.autochangebackground == false){
+        } else if (user_settings.autochangebackground == false) {
             clearInterval(background_auto_change_interval);
         }
     }
@@ -574,35 +580,86 @@ function resetVarsToDefault() {
 //Create/load user settings
 function setupUserSettings() {
     if (local_storage_supported) {
-        //If no saved settings then create new ones
-        if (localStorage.user_settings == null) {
-            user_settings = newUserSettings(false);
-            localStorage.setItem("user_settings", JSON.stringify(user_settings));
+        let tmp_settings = null;
+        let url_settings_failed = false;
 
+        //Checks the URL first
+        let url = window.location.href;
+        let settings_look_for_string = "?s=";
+        let url_index = (window.location.href).indexOf(settings_look_for_string);
+
+        //If there is a settings in the url then go ahead and decode and apply the settings
+        if (url_index > 0) {
+            //
+            let tmp_settings_url_string = url.slice(url_index + settings_look_for_string.length);
+            try{
+                tmp_settings = decodeUserSettings(tmp_settings_url_string, true);
+            }catch (e){
+                console.log(e);
+                url_settings_failed = true;
+            }
         } else {
-            //Load the users settings and shortcuts if they have it
-            user_shortcut_map = new Map();
-            let tmp_settings = JSON.parse(localStorage.getItem("user_settings"))
-            if (tmp_settings.version >= app_save_version) {
+            url_settings_failed = true;
+        }
+
+        //Only execute if there are no url settings
+        if (url_settings_failed) {
+            //If no saved settings then create new ones
+            if (localStorage.user_settings == null) {
+                user_settings = newUserSettings(false);
+                localStorage.setItem("user_settings", JSON.stringify(user_settings));
+
+                //No need to go any further. New settings are created and you are done
+                return;
+            } else {
+                //Load the users settings and shortcuts if they have it
+                user_shortcut_map = new Map();
+                tmp_settings = JSON.parse(localStorage.getItem("user_settings"))
+            }
+        }
+
+        //Settings are up to date! You good :D
+        if (tmp_settings.version >= app_save_version) {
+            //If we are not using the url settings
+            if(url_settings_failed){
                 user_settings = tmp_settings;
 
                 tmp_settings.users_shortcuts.map((x) => {
                     user_shortcut_map.set(x.name, x.value)
                 })
-            } else {
-                let tmp_version = tmp_settings.version;
-                while (tmp_version < app_save_version) {
-                    tmp_settings = upgradeUserSettings(tmp_version,tmp_settings);
-                    tmp_version = tmp_settings.version;
-                }
-                user_settings = tmp_settings;
-                tmp_settings.users_shortcuts.map((x) => {
-                    user_shortcut_map.set(x.name, x.value)
-                })
+            }else{
+                //If we are using the settings, call this function
+                //This function will remap the user_shortcuts for us! User shortcuts could be null so don't assume
+                applyDecodedUserSettings(tmp_settings);
             }
 
         }
-    } else {
+        //Settings are not up to date, update needed
+        else {
+            let tmp_version = tmp_settings.version;
+            while (tmp_version < app_save_version) {
+                tmp_settings = upgradeUserSettings(tmp_version, tmp_settings);
+                tmp_version = tmp_settings.version;
+            }
+
+            if(url_settings_failed){
+                tmp_settings.users_shortcuts.map((x) => {
+                    user_shortcut_map.set(x.name, x.value)
+                    user_settings = tmp_settings;
+                })
+            }else{
+                //If we are using the settings, call this function
+                //This function will remap the user_shortcuts for us! User shortcuts could be null so don't assume
+                applyDecodedUserSettings(tmp_settings);
+            }
+
+        }
+
+        //Last thing to do, apply the settings
+        applyUserSettings();
+    }
+    //Local Storage is not supported
+    else {
         //Do something in the future?
         newUserSettings(false);
         console.log("Local Storage support: " + local_storage_supported);
@@ -653,26 +710,76 @@ function upgradeUserSettings(version, user_settings) {
     }
 }
 
-function encodeUserSettings2048(saveshortcuts = false) {
-    var enc = new TextEncoder();
-    let encoded = null;
-    if (saveshortcuts) {
-        user_settings.users_shortcuts = Array.from(user_shortcut_map, ([name, value]) => ({name, value}));
-        encoded = encode(enc.encode(JSON.stringify(user_settings)));
-    } else {
-        let tmp = user_settings;
-        tmp.users_shortcuts = null;
-        encoded = encode(enc.encode(JSON.stringify(tmp)));
+//Encodes the user settings in base64, but only the actual settings, not their key:value pairs. Saves a shit ton of space!
+//Can pass in a object manually to encode that instead
+function encodeUserSettings(saveshortcuts = false,manualObj = {}) {
+    let settings_arr = [];
+    //If there is no manual Object that is given by the user
+    if(Object.keys(manualObj).length !== 0){
+        settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({name, value})), user_settings.version, user_settings.random_seek,user_settings.clock_font_size,user_settings.greetingfontsize,user_settings.clock_color,user_settings.greeting_color,user_settings.hide_greetings,user_settings.hide_clock,user_settings.text_shadows,user_settings.clock24hr,user_settings.autochangebackground,user_settings.autobackgroundtime];
+    }else{
+        settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({name, value})), manualObj.version, manualObj.random_seek,manualObj.clock_font_size,manualObj.greetingfontsize,manualObj.clock_color,manualObj.greeting_color,manualObj.hide_greetings,manualObj.hide_clock,manualObj.text_shadows,manualObj.clock24hr,manualObj.autochangebackground,manualObj.autobackgroundtime];
     }
-
-    return encoded;
+   if (!saveshortcuts) {
+        settings_arr[0] = null;
+    }
+    //Base64 encoding of the settings
+    return btoa(JSON.stringify(settings_arr));
 }
 
-function decodeUserSettings2048(encodedSettings){
+//Decodes the base 64 string that is given to it, returns a default profile if there is an error
+function decodeUserSettings(encodedSettings, returnObj = true) {
+    //Will return the array of the settings and no obj
+    if(returnObj==false){
+        try {
+            let arr = JSON.parse(atob(encodedSettings));
+            return arr;
+        } catch (e) {
+            console.log(e);
+            //If it fails, make a new basic user object, encode it, then decode it and return that. Shouldn't fail :o
+            return decodeUserSettings(encodeUserSettings(newUserSettings()),false);
+        }
+        //Will return an object of the user_settings based on the input
+    }else{
+        try {
+            //Decode and throw into a tmp obj
+            let tmp_user_settings = JSON.parse(atob(encodedSettings));
 
-    let string = new TextDecoder().decode(decode(encodedSettings));
-    let tmp_settings = JSON.parse(string);
+            //If no shortcuts then put the default ones in there
+            if(tmp_user_settings.users_shortcuts==null){
+                tmp_user_settings.users_shortcuts = Array.from(default_shortcut_map, ([name, value]) => ({name, value}));
+            }
+            //Create a new object and return it
+            return new user_settings_obj(tmp_user_settings[0],tmp_user_settings[1],tmp_user_settings[2],tmp_user_settings[3],tmp_user_settings[4],tmp_user_settings[5],tmp_user_settings[6],tmp_user_settings[7],tmp_user_settings[8],tmp_user_settings[9],tmp_user_settings[10],tmp_user_settings[11],tmp_user_settings[12]);
 
+        } catch (e) {
+            console.log(e);
+            //If it fails, make a new basic user object, encode it, then decode it and return that. Shouldn't fail :o
+            return newUserSettings();
+        }
+    }
+
+}
+
+//Applies a user_settings object. Intended to be used with the output of the DecodeUserSettings2048 function
+function applyDecodedUserSettings(encodedJSON, autoSaveSettings = true) {
+    if (encodedJSON.users_shortcuts == null) {
+        user_shortcut_map = default_shortcut_map
+
+    } else {
+        //If they include the shortcuts then load them in
+        user_shortcut_map = new Map();
+        encodedJSON.users_shortcuts.map((x) => {
+            user_shortcut_map.set(x.name, x.value)
+        });
+    }
+    user_settings = encodedJSON;
+
+    if (autoSaveSettings) {
+        saveUserSettings();
+    }
+
+    applyUserSettings();
 }
 
 

@@ -11,6 +11,9 @@ const app_save_version = 1.1
 const app_version_num = 1.1
 var auto_change_background_active = false;
 var auto_change_background_time = 0;
+const debug = true;
+const prod_url = "https://8bitdashboard.com/";
+const local_url = "http://127.0.0.1/8bitdashboard/Website/html/";
 
 
 var user_settings_obj = class {
