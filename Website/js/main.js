@@ -35,11 +35,11 @@ function settingsModelContent() {
         "<div class='content container space12'> <div class='wholeline'></div>\n"
     //Shortcuts
     user_shortcut_map.forEach((value, key) => {
-        html_to_insert += "<input value='" + key + "' class='shortcutkey left-side'> <input value='" + value + "' class='shortcutvalue right-side'> <div class='wholeline shortcutvaluespacer'></div>"
+        html_to_insert += "<input value='" + key + "' class='shortcutkey left-side' title='Shortcut Key'> <input value='" + value + "' class='shortcutvalue right-side' title='Shortcut Website'> <div class='wholeline shortcutvaluespacer'></div>"
     })
     //New Shortcut button
     html_to_insert += "<div class='wholeline'></div> " +
-        "<button type='button' class='space4 btn mobilefullsize' onclick='newshortcut()'>Add Shortcut</button> " +
+        "<button type='button' class='space4 btn mobilefullsize' onclick='newshortcut()' title='Add shortcut button'>Add Shortcut</button> " +
         "<div class='space8'></div> "
 
     html_to_insert += "<div class='wholeline'></div> </div>" +
@@ -49,22 +49,22 @@ function settingsModelContent() {
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     //Clock settings
-    html_to_insert += "<button type='button' class='collapsible space12'>Clock</button>\n" +
+    html_to_insert += "<button type='button' class='collapsible space12' title='Clock settings'>Clock</button>\n" +
         "<div class='content container space12'>\n"
 
     html_to_insert += "<div class='wholeline'></div> " +
         "<div class='left-side'>Clock Color: </div>" +
-        "<input id='clockcolor' class='right-side' value='" + user_settings.clock_color + "' data-jscolor='{}'>"
+        "<input id='clockcolor' class='right-side' value='" + user_settings.clock_color + "' data-jscolor='{}' title='Color of the clock'>"
 
     //Show Clock
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Show Clock: </div> <div class='right-side'>" +
-        "<label class='switch'>\ <input id='clockcheckmark' type='checkbox'>\ <span class='slider round'></span>\ </label></div>"
+        "<label class='switch'>\ <input id='clockcheckmark' type='checkbox' >\ <span class='slider round' title='Show the clock or not'></span>\ </label></div>"
 
     //24hr Clock
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>24hr Clock: </div> " +
-        "<div class='right-side'><label class='switch'>\ <input id='24hrcheckmark' type='checkbox'>\ <span class='slider round'></span>\ </label></div>"
+        "<div class='right-side'><label class='switch'>\ <input id='24hrcheckmark' type='checkbox'>\ <span class='slider round' title='24 hour clock'></span>\ </label></div>"
 
 
     html_to_insert += "<div class='wholeline'></div> </div>"
@@ -75,18 +75,18 @@ function settingsModelContent() {
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> "
 
     //Greetings settings
-    html_to_insert += "<button type='button' class='collapsible space12'>Greeting</button>\n" +
+    html_to_insert += "<button type='button' class='collapsible space12' title='Greeting settings'>Greeting</button>\n" +
         "<div class='content container space12'>\n"
 
     //Greetings Color
     html_to_insert += "<div class='wholeline'></div> " +
         "<div class='left-side'>Greeting Color: </div> " +
-        "<input id='greetingcolor' class='right-side' value='" + user_settings.greeting_color + "' data-jscolor='{}'> "
+        "<input id='greetingcolor' class='right-side' value='" + user_settings.greeting_color + "' data-jscolor='{}' title='Greeting color'> "
 
     //Show Greetings
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Show Greeting: </div> <div class='right-side'>" +
-        "<label class='switch'>\ <input id='greetingscheckmark' type='checkbox'>\ <span class='slider round'></span>\ </label></div>"
+        "<label class='switch'>\ <input id='greetingscheckmark' type='checkbox'>\ <span class='slider round' title='Show the greeting'></span>\ </label></div>"
 
     html_to_insert += "<div class='wholeline'></div> </div>"
     /*End of greeting settings*/
@@ -96,23 +96,23 @@ function settingsModelContent() {
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> "
 
     //Background settings
-    html_to_insert += "<button type='button' class='collapsible space12'>Background</button>\n" +
+    html_to_insert += "<button type='button' class='collapsible space12' title='Settings related to the background images'>Background</button>\n" +
         "<div class='content container space12'>\n"
 
     //Scrub Random Images
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Scrub Random Images: </div>" +
-        "<div class='right-side'><label class='switch'>\ <input id='randomimagecheckmark' type='checkbox'>\ <span class='slider round'></span>\ </label></div>"
+        "<div class='right-side'><label class='switch'>\ <input id='randomimagecheckmark' type='checkbox'>\ <span class='slider round' title='Images are random when using arrow keys'></span>\ </label></div>"
 
     //Auto Change Background
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Auto Change Background: </div> " +
-        "<div class='right-side'><label class='switch'>\ <input id='autochangebackgroundcheckmark' type='checkbox'>\ <span class='slider round'></span>\ </label></div>"
+        "<div class='right-side'><label class='switch'>\ <input id='autochangebackgroundcheckmark' type='checkbox'>\ <span class='slider round' title='Change the background automatically'></span>\ </label></div>"
 
     //Change in minutes
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side' id='autochangeminutesleft'>Change every X mins: </div> " +
-        "<div class='right-side' id='autochangeminutesright'><input type='number' id='changeminutesinput' class='numinput' name='quantity' min='.5' max='1440' step='.5' value='1' onfocusout='validateinput(changeminutesinput)'></div>"
+        "<div class='right-side' id='autochangeminutesright'><input type='number' id='changeminutesinput' class='numinput' name='quantity' min='.5' max='1440' step='.5' value='1' onfocusout='validateinput(changeminutesinput)' title='The number of minutes before the background changes'></div>"
 
     html_to_insert += "<div class='wholeline'></div> </div>"
     /*End of Background settings*/
@@ -121,27 +121,47 @@ function settingsModelContent() {
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> "
 
     //Accessibility settings
-    html_to_insert += "<button type='button' class='collapsible space12'>Accessibility</button>\n" +
+    html_to_insert += "<button type='button' class='collapsible space12' title='Accessibility settings'>Accessibility</button>\n" +
         "<div class='content container space12'>\n"
 
     //Text shadows
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Text Shadows: </div> " +
-        "<div class='right-side'><label class='switch'>\ <input id='textshadowscheckmark' type='checkbox'>\ <span class='slider round'></span>\ </label></div>"
+        "<div class='right-side'><label class='switch'>\ <input id='textshadowscheckmark' type='checkbox'>\ <span class='slider round' title='Turn text shadows on or off'></span>\ </label></div>"
 
     //Clock Size
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Clock Size: </div> " +
-        "<div class='right-side'><input type='number' id='clockfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(clockfontsize)'></div>"
+        "<div class='right-side'><input type='number' id='clockfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(clockfontsize)' title='Font size of the clock'></div>"
 
     //Greeting Size
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Greeting Size: </div> " +
-        "<div class='right-side'><input type='number' id='greetingfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(greetingfontsize)'></div>"
+        "<div class='right-side'><input type='number' id='greetingfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(greetingfontsize)' title='Font size of the greeting'></div>"
 
 
     html_to_insert += "<div class='wholeline'></div> </div>"
     /*End of Accessibility settings*/
+
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> "
+
+    //Sharing settings
+    html_to_insert += "<button type='button' class='collapsible space12' title='Share your settings with others!'>Sharing</button>\n" +
+        "<div class='content container space12'>\n"
+
+    //Bookmark settings
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Share your shortcuts too: </div> " +
+        "<div class='right-side'><label class='switch'>\ <input id='bookmarkscheckmark' type='checkbox'>\ <span class='slider round' title='Include your shortcuts too'></span>\ </label></div>"
+
+
+    //URL settings
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='wholeline-autoheight'>Your settings URL: <input id='settingsurl' value='' class='full-width' readonly onclick=\"copyURL()\"> </div>" +
+        "<span class=\"copyAlert wholeline-autoheight red-font\">Copied to clipboard!</span>"
+
+    html_to_insert += "<div class='wholeline'></div> </div>"
+    /*End of Sharing settings*/
 
 
     //Save and Reset Settings
@@ -213,6 +233,35 @@ function updateSettingsSettings() {
             document.getElementById("autochangeminutesright").style.display = "none";
         }
     });
+    document.getElementById("bookmarkscheckmark").addEventListener('change', function () {
+        updateSettingsURLInput();
+    });
+
+    updateSettingsURLInput();
+}
+
+//Will update the URL input box with the url with their settings
+function updateSettingsURLInput() {
+    let save_user_settings = document.getElementById("bookmarkscheckmark").checked;
+    document.getElementById("settingsurl").value = "https://8bitdashboard.com/?s=" + encodeUserSettings(save_user_settings);
+}
+
+function copyURL() {
+    let input_element = document.getElementById("settingsurl");
+    navigator.clipboard.writeText(input_element.value);
+
+
+    const copyDiv = document.querySelector('.copyAlert:not(.animate)');
+    if (copyDiv) {
+        copyDiv.classList.add('animate');
+        copyDiv.addEventListener('animationend', () => copyDiv.classList.remove('animate'));
+    }
+
+    //Weird hack where we need to deselect then reselect
+    window.getSelection().removeAllRanges();
+    input_element.focus();
+    input_element.select();
+
 
 }
 
@@ -592,9 +641,9 @@ function setupUserSettings() {
         if (url_index > 0) {
             //
             let tmp_settings_url_string = url.slice(url_index + settings_look_for_string.length);
-            try{
+            try {
                 tmp_settings = decodeUserSettings(tmp_settings_url_string, true);
-            }catch (e){
+            } catch (e) {
                 console.log(e);
                 url_settings_failed = true;
             }
@@ -608,6 +657,7 @@ function setupUserSettings() {
             if (localStorage.user_settings == null) {
                 user_settings = newUserSettings(false);
                 localStorage.setItem("user_settings", JSON.stringify(user_settings));
+                initial_save_version = app_save_version;
 
                 //No need to go any further. New settings are created and you are done
                 return;
@@ -618,16 +668,25 @@ function setupUserSettings() {
             }
         }
 
+        try{
+            initial_save_version = tmp_settings.version;
+        }catch (e){
+            //Might be null
+            initial_save_version = app_save_version;
+        }
+
+
         //Settings are up to date! You good :D
         if (tmp_settings.version >= app_save_version) {
+
             //If we are not using the url settings
-            if(url_settings_failed){
+            if (url_settings_failed) {
                 user_settings = tmp_settings;
 
                 tmp_settings.users_shortcuts.map((x) => {
                     user_shortcut_map.set(x.name, x.value)
                 })
-            }else{
+            } else {
                 //If we are using the settings, call this function
                 //This function will remap the user_shortcuts for us! User shortcuts could be null so don't assume
                 applyDecodedUserSettings(tmp_settings);
@@ -637,17 +696,18 @@ function setupUserSettings() {
         //Settings are not up to date, update needed
         else {
             let tmp_version = tmp_settings.version;
+
             while (tmp_version < app_save_version) {
                 tmp_settings = upgradeUserSettings(tmp_version, tmp_settings);
                 tmp_version = tmp_settings.version;
             }
 
-            if(url_settings_failed){
+            if (url_settings_failed) {
                 tmp_settings.users_shortcuts.map((x) => {
                     user_shortcut_map.set(x.name, x.value)
                     user_settings = tmp_settings;
                 })
-            }else{
+            } else {
                 //If we are using the settings, call this function
                 //This function will remap the user_shortcuts for us! User shortcuts could be null so don't assume
                 applyDecodedUserSettings(tmp_settings);
@@ -712,15 +772,21 @@ function upgradeUserSettings(version, user_settings) {
 
 //Encodes the user settings in base64, but only the actual settings, not their key:value pairs. Saves a shit ton of space!
 //Can pass in a object manually to encode that instead
-function encodeUserSettings(saveshortcuts = false,manualObj = {}) {
+function encodeUserSettings(saveshortcuts = false, manualObj = {}) {
     let settings_arr = [];
     //If there is no manual Object that is given by the user
-    if(Object.keys(manualObj).length !== 0){
-        settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({name, value})), user_settings.version, user_settings.random_seek,user_settings.clock_font_size,user_settings.greetingfontsize,user_settings.clock_color,user_settings.greeting_color,user_settings.hide_greetings,user_settings.hide_clock,user_settings.text_shadows,user_settings.clock24hr,user_settings.autochangebackground,user_settings.autobackgroundtime];
-    }else{
-        settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({name, value})), manualObj.version, manualObj.random_seek,manualObj.clock_font_size,manualObj.greetingfontsize,manualObj.clock_color,manualObj.greeting_color,manualObj.hide_greetings,manualObj.hide_clock,manualObj.text_shadows,manualObj.clock24hr,manualObj.autochangebackground,manualObj.autobackgroundtime];
+    if (Object.keys(manualObj).length === 0) {
+        settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({
+            name,
+            value
+        })), user_settings.version, user_settings.random_seek, user_settings.clock_font_size, user_settings.greetingfontsize, user_settings.clock_color, user_settings.greeting_color, user_settings.hide_greetings, user_settings.hide_clock, user_settings.text_shadows, user_settings.clock24hr, user_settings.autochangebackground, user_settings.autobackgroundtime];
+    } else {
+        settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({
+            name,
+            value
+        })), manualObj.version, manualObj.random_seek, manualObj.clock_font_size, manualObj.greetingfontsize, manualObj.clock_color, manualObj.greeting_color, manualObj.hide_greetings, manualObj.hide_clock, manualObj.text_shadows, manualObj.clock24hr, manualObj.autochangebackground, manualObj.autobackgroundtime];
     }
-   if (!saveshortcuts) {
+    if (!saveshortcuts) {
         settings_arr[0] = null;
     }
     //Base64 encoding of the settings
@@ -730,30 +796,34 @@ function encodeUserSettings(saveshortcuts = false,manualObj = {}) {
 //Decodes the base 64 string that is given to it, returns a default profile if there is an error
 function decodeUserSettings(encodedSettings, returnObj = true) {
     //Will return the array of the settings and no obj
-    if(returnObj==false){
+    if (returnObj == false) {
         try {
             let arr = JSON.parse(atob(encodedSettings));
             return arr;
         } catch (e) {
             console.log(e);
             //If it fails, make a new basic user object, encode it, then decode it and return that. Shouldn't fail :o
-            return decodeUserSettings(encodeUserSettings(newUserSettings()),false);
+            return decodeUserSettings(encodeUserSettings(newUserSettings()), false);
         }
         //Will return an object of the user_settings based on the input
-    }else{
+    } else {
         try {
             //Decode and throw into a tmp obj
             let tmp_user_settings = JSON.parse(atob(encodedSettings));
 
             //If no shortcuts then put the default ones in there
-            if(tmp_user_settings.users_shortcuts==null){
-                tmp_user_settings.users_shortcuts = Array.from(default_shortcut_map, ([name, value]) => ({name, value}));
+            if (tmp_user_settings.users_shortcuts == null) {
+                tmp_user_settings.users_shortcuts = Array.from(default_shortcut_map, ([name, value]) => ({
+                    name,
+                    value
+                }));
             }
             //Create a new object and return it
-            return new user_settings_obj(tmp_user_settings[0],tmp_user_settings[1],tmp_user_settings[2],tmp_user_settings[3],tmp_user_settings[4],tmp_user_settings[5],tmp_user_settings[6],tmp_user_settings[7],tmp_user_settings[8],tmp_user_settings[9],tmp_user_settings[10],tmp_user_settings[11],tmp_user_settings[12]);
+            return new user_settings_obj(tmp_user_settings[0], tmp_user_settings[1], tmp_user_settings[2], tmp_user_settings[3], tmp_user_settings[4], tmp_user_settings[5], tmp_user_settings[6], tmp_user_settings[7], tmp_user_settings[8], tmp_user_settings[9], tmp_user_settings[10], tmp_user_settings[11], tmp_user_settings[12]);
 
         } catch (e) {
             console.log(e);
+            alert("URL Settings are not correct, using default settings");
             //If it fails, make a new basic user object, encode it, then decode it and return that. Shouldn't fail :o
             return newUserSettings();
         }

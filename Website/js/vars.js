@@ -8,12 +8,13 @@ const local_storage_supported = typeof (Storage) !== "undefined";
 const default_clock_font_size = 4;
 const default_greeting_font_size = 2;
 const app_save_version = 1.1
-const app_version_num = 1.1
+const app_version_num = 1.3
 var auto_change_background_active = false;
 var auto_change_background_time = 0;
 const debug = true;
 const prod_url = "https://8bitdashboard.com/";
 const local_url = "http://127.0.0.1/8bitdashboard/Website/html/";
+var initial_save_version = 0;
 
 
 var user_settings_obj = class {

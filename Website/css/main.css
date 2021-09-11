@@ -150,6 +150,9 @@ body{
 .right-side {
     grid-column: span 8;
 }
+.wholeline-autoheight {
+    grid-column: span 12;
+}
 
 .wholeline {
     grid-column: span 12;
@@ -204,6 +207,9 @@ body{
     grid-column: span 12;
 }
 
+.full-width{
+    width: 100%;
+}
 
 /* Switches  from: https://www.w3schools.com/howto/howto_css_switch.asp*/
 .switch {
@@ -413,4 +419,21 @@ Filters and colors
         top:1em
     }
 
+}
+
+.red-font{
+    color:red;
+}
+
+/*
+Thanks to https://stackoverflow.com/questions/58159123/how-to-replay-this-css-animation-each-time-a-user-clicks for the css help
+ */
+.animate { animation: disappear 2s linear; }
+
+.copyAlert { opacity: 0; }
+
+@keyframes disappear {
+    3%  { opacity: 0; }
+    60%  { opacity: 1; }
+    100% { opacity: 0; }
 }
