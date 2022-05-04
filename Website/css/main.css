@@ -14,8 +14,6 @@ body{
 }
 
 #showcase {
-    background-size: cover;
-    background-position: center;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -418,6 +416,19 @@ Filters and colors
     #author{
         top:1em
     }
+
+}
+
+#background{
+    content:"";
+    height:100vh;
+    width:100vw;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: -10;
+    background-size: cover;
+    background-position: center;
 
 }
 

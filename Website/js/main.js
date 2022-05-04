@@ -120,6 +120,41 @@ function settingsModelContent() {
 
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> "
 
+    //Filter settings
+    html_to_insert += "<button type='button' class='collapsible space12' title='Background Filter settings'>Background Filters</button>\n" +
+        "<div class='content container space12'>\n"
+
+    //Filters on or off
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter: </div> " +
+        "<div class='right-side'><label class='switch'>\ <input id='filterscheckmark' type='checkbox'>\ <span class='slider round' title='Turn filters on or off'></span>\ </label></div>"
+
+    //Clock Size
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter: </div> " +
+        "<div class='right-side'><select name='filterlist' id='filterlist' onchange='filterlistoption()'>\n" +
+        "    <option value='blur'>Blur</option>\n"+
+        "    <option value='brightness'>Brightness</option>\n"+
+        "    <option value='contrast'>Contrast</option>\n"+
+        "    <option value='grayscale'>Grayscale</option>\n"+
+        "    <option value='hue-rotate'>Hue Rotate</option>\n"+
+        "    <option value='invert'>Invert</option>\n"+
+        "    <option value='opacity'>Opacity</option>\n"+
+        "    <option value='saturate'>Saturate</option>\n"+
+        "    <option value='sepia'>Sepia</option>\n"+
+        "  </select></div>"
+
+    //Greeting Size
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter Strength: </div> " +
+        "<div class='right-side'></div>"
+
+
+    html_to_insert += "<div class='wholeline'></div> </div>"
+    /*End of background filter settings*/
+
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> "
+
     //Accessibility settings
     html_to_insert += "<button type='button' class='collapsible space12' title='Accessibility settings'>Accessibility</button>\n" +
         "<div class='content container space12'>\n"
@@ -441,7 +476,7 @@ function getRandomImage() {
 //Sets a random Image url
 function setRandomImage() {
     image = getRandomImage();
-    document.getElementById("showcase").style.backgroundImage = "url('" + image[0] + "')";
+    document.getElementById("background").style.backgroundImage = "url('" + image[0] + "')";
     updateArtistAttr(image);
 }
 
@@ -449,7 +484,7 @@ function setRandomImage() {
 function setImageNum(Num) {
     if (Num < number_of_imgs && Num > 0) {
         img_number = Num;
-        document.getElementById("showcase").style.backgroundImage = "url('" + images[Num][0] + "')";
+        document.getElementById("background").style.backgroundImage = "url('" + images[Num][0] + "')";
         updateArtistAttr(images[Num]);
     }
 }
