@@ -1,10 +1,10 @@
-//Main function being called
+//Main function being called,
 
 
 function main() {
     setUpModal();
-    setupUserSettings();
     setRandomImage();
+    setupUserSettings();
     getSetTime();
     setGreeting();
     time = setInterval(getSetTime, 5000);
@@ -32,10 +32,10 @@ function settingsModelContent() {
 
     //Shortcut settings
     html_to_insert += "<button type='button' class='collapsible space12'>Shortcuts</button>\n" +
-        "<div class='content container space12'> <div class='wholeline'></div>\n"
+        "<div class='content container space12'> <div class='wholeline shortcutvaluespacer'></div>\n"
     //Shortcuts
     user_shortcut_map.forEach((value, key) => {
-        html_to_insert += "<input value='" + key + "' class='shortcutkey left-side' title='Shortcut Key'> <input value='" + value + "' class='shortcutvalue right-side' title='Shortcut Website'> <div class='wholeline shortcutvaluespacer'></div>"
+        html_to_insert += "<input value='" + key + "' class='shortcutkey left-side' title='Shortcut Key'> <input value='" + value + "' class='shortcutvalue' title='Shortcut Website'> <div class='X-button' onclick='delete_shortcut(this)'>X</div> <div class='wholeline shortcutvaluespacer'></div>"
     })
     //New Shortcut button
     html_to_insert += "<div class='wholeline'></div> " +
@@ -112,7 +112,21 @@ function settingsModelContent() {
     //Change in minutes
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side' id='autochangeminutesleft'>Change every X mins: </div> " +
-        "<div class='right-side' id='autochangeminutesright'><input type='number' id='changeminutesinput' class='numinput' name='quantity' min='.5' max='1440' step='.5' value='1' onfocusout='validateinput(changeminutesinput)' title='The number of minutes before the background changes'></div>"
+        "<div class='right-side' id='autochangeminutesright'><input type='number' id='changeminutesinput' class='numinput' name='quantity' min='.5' max='1440' step='.5' value='1' onfocusout='validateinput(this)' title='The number of minutes before the background changes'></div>"
+
+    //Static startup background
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Start up background: </div> " +
+        "<div class='right-side'><label class='switch'>\ <input id='startupbackgroundcheckmark' type='checkbox'>\ <span class='slider round' title='Sets the background on startup to the same image every time'></span>\ </label></div>"
+
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Start up image: </div> " +
+        "<div class='right-side'><input type='number' id='startupimageinput'  class='numinput' name='quantity' min='1' step='1' value='1' onchange='validateinput(this)' title='The image number you want to start on'></div>"
+
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Current Image Number: </div> " +
+        "<div class='right-side'><div id='current_image_number'  title='Current Image Number'> </div></div>"
+
 
     html_to_insert += "<div class='wholeline'></div> </div>"
     /*End of Background settings*/
@@ -124,30 +138,80 @@ function settingsModelContent() {
     html_to_insert += "<button type='button' class='collapsible space12' title='Background Filter settings'>Background Filters</button>\n" +
         "<div class='content container space12'>\n"
 
-    //Filters on or off
+    //Filter on or off
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
-        "<div class='left-side'>Background Filter: </div> " +
-        "<div class='right-side'><label class='switch'>\ <input id='filterscheckmark' type='checkbox'>\ <span class='slider round' title='Turn filters on or off'></span>\ </label></div>"
+        "<div class='left-side'>Background Filter 1: </div> " +
+        "<div class='right-side'><label class='switch'>\ <input id='filterscheckmark1'  class='filtercheckmark' type='checkbox'>\ <span class='slider round' title='Turn filters on or off'></span>\ </label></div>"
 
-    //Clock Size
+    //Filter dropdown
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
-        "<div class='left-side'>Background Filter: </div> " +
-        "<div class='right-side'><select name='filterlist' id='filterlist' onchange='filterlistoption()'>\n" +
-        "    <option value='blur'>Blur</option>\n"+
-        "    <option value='brightness'>Brightness</option>\n"+
-        "    <option value='contrast'>Contrast</option>\n"+
-        "    <option value='grayscale'>Grayscale</option>\n"+
-        "    <option value='hue-rotate'>Hue Rotate</option>\n"+
-        "    <option value='invert'>Invert</option>\n"+
-        "    <option value='opacity'>Opacity</option>\n"+
-        "    <option value='saturate'>Saturate</option>\n"+
-        "    <option value='sepia'>Sepia</option>\n"+
+        "<div class='left-side'>Background Filter 1: </div> " +
+        "<div class='right-side'><select name='filterlist' class='filterlist' id='filterlist1' onchange=''>\n" +
+        "    <option value='blur'>Blur</option>\n" +
+        "    <option value='brightness'>Brightness</option>\n" +
+        "    <option value='contrast'>Contrast</option>\n" +
+        "    <option value='grayscale'>Grayscale</option>\n" +
+        "    <option value='hue-rotate'>Hue Rotate</option>\n" +
+        "    <option value='invert'>Invert</option>\n" +
+        "    <option value='opacity'>Opacity</option>\n" +
+        "    <option value='saturate'>Saturate</option>\n" +
+        "    <option value='sepia'>Sepia</option>\n" +
         "  </select></div>"
 
-    //Greeting Size
+    //Filter Strength
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
-        "<div class='left-side'>Background Filter Strength: </div> " +
-        "<div class='right-side'></div>"
+        "<div class='left-side'>Background Filter Strength 1: </div> " +
+        "<div class='right-side'><input type='number' id='backgroundfilterstrength1' class='filterstrength numinput' class='numinput' name='quantity' min='1' max='100' step='1' value='1' onchange='validateinput(this)' title='Font size of the clock'></div>"
+
+    //Filter on or off
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter 2: </div> " +
+        "<div class='right-side'><label class='switch'>\ <input id='filterscheckmark2' class='filtercheckmark' type='checkbox'>\ <span class='slider round' title='Turn filters on or off'></span>\ </label></div>"
+
+    //Filter dropdown
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter 2: </div> " +
+        "<div class='right-side'><select name='filterlist'  class='filterlist' id='filterlist2' onchange=''>\n" +
+        "    <option value='blur'>Blur</option>\n" +
+        "    <option value='brightness'>Brightness</option>\n" +
+        "    <option value='contrast'>Contrast</option>\n" +
+        "    <option value='grayscale'>Grayscale</option>\n" +
+        "    <option value='hue-rotate'>Hue Rotate</option>\n" +
+        "    <option value='invert'>Invert</option>\n" +
+        "    <option value='opacity'>Opacity</option>\n" +
+        "    <option value='saturate'>Saturate</option>\n" +
+        "    <option value='sepia'>Sepia</option>\n" +
+        "  </select></div>"
+
+    //Filter Strength
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter Strength 2: </div> " +
+        "<div class='right-side'><input type='number' id='backgroundfilterstrength2' class='filterstrength numinput' class='numinput' name='quantity' min='1' max='100' step='1' value='1' onchange='validateinput(this)' title='Font size of the clock'></div>"
+
+    //Filter on or off
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter 3: </div> " +
+        "<div class='right-side'><label class='switch'>\ <input id='filterscheckmark3' class='filtercheckmark'  type='checkbox'>\ <span class='slider round' title='Turn filters on or off'></span>\ </label></div>"
+
+    //Filter dropdown
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter 3: </div> " +
+        "<div class='right-side'><select name='filterlist' class='filterlist' id='filterlist3' onchange=''>\n" +
+        "    <option value='blur'>Blur</option>\n" +
+        "    <option value='brightness'>Brightness</option>\n" +
+        "    <option value='contrast'>Contrast</option>\n" +
+        "    <option value='grayscale'>Grayscale</option>\n" +
+        "    <option value='hue-rotate'>Hue Rotate</option>\n" +
+        "    <option value='invert'>Invert</option>\n" +
+        "    <option value='opacity'>Opacity</option>\n" +
+        "    <option value='saturate'>Saturate</option>\n" +
+        "    <option value='sepia'>Sepia</option>\n" +
+        "  </select></div>"
+
+    //Filter Strength
+    html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
+        "<div class='left-side'>Background Filter Strength 3: </div> " +
+        "<div class='right-side'><input type='number' id='backgroundfilterstrength3' class='filterstrength numinput' class='numinput' name='quantity' min='1' max='100' step='1' value='1' onchange='validateinput(this)' title='Font size of the clock'></div>"
 
 
     html_to_insert += "<div class='wholeline'></div> </div>"
@@ -167,12 +231,12 @@ function settingsModelContent() {
     //Clock Size
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Clock Size: </div> " +
-        "<div class='right-side'><input type='number' id='clockfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(clockfontsize)' title='Font size of the clock'></div>"
+        "<div class='right-side'><input type='number' id='clockfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(this)' title='Font size of the clock'></div>"
 
     //Greeting Size
     html_to_insert += "<div class='wholeline'></div><div class='wholeline'></div> " +
         "<div class='left-side'>Greeting Size: </div> " +
-        "<div class='right-side'><input type='number' id='greetingfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(greetingfontsize)' title='Font size of the greeting'></div>"
+        "<div class='right-side'><input type='number' id='greetingfontsize' class='numinput' name='quantity' min='.5' max='3' step='.1' value='1' onfocusout='validateinput(this)' title='Font size of the greeting'></div>"
 
 
     html_to_insert += "<div class='wholeline'></div> </div>"
@@ -230,23 +294,47 @@ function settingsModelContent() {
 function updateSettingsSettings() {
 //Change settings
     if (!user_settings.hide_greetings) {
-        document.getElementById("greetingscheckmark").setAttribute("checked", '')
+        document.getElementById("greetingscheckmark").setAttribute("checked", '');
     }
     if (user_settings.text_shadows) {
-        document.getElementById("textshadowscheckmark").setAttribute("checked", '')
+        document.getElementById("textshadowscheckmark").setAttribute("checked", '');
     }
     if (user_settings.random_seek) {
-        document.getElementById("randomimagecheckmark").setAttribute("checked", '')
+        document.getElementById("randomimagecheckmark").setAttribute("checked", '');
     }
     if (!user_settings.hide_clock) {
-        document.getElementById("clockcheckmark").setAttribute("checked", '')
+        document.getElementById("clockcheckmark").setAttribute("checked", '');
     }
     if (user_settings.clock24hr) {
-        document.getElementById("24hrcheckmark").setAttribute("checked", '')
+        document.getElementById("24hrcheckmark").setAttribute("checked", '');
     }
     if (user_settings.autochangebackground) {
-        document.getElementById("autochangebackgroundcheckmark").setAttribute("checked", '')
+        document.getElementById("autochangebackgroundcheckmark").setAttribute("checked", '');
     }
+
+    //Get all background filter yes or nos
+    user_settings.backgroundfilter.forEach((x, i) => {
+        if (x) {
+            document.getElementById("filterscheckmark" + (i + 1)).setAttribute("checked", '');
+        }
+    });
+
+    //Get all background filter options
+    user_settings.backgroundfilterpick.forEach((x, i) => {
+        document.getElementById("filterlist" + (i + 1)).value = x;
+    });
+
+    //Get all background filter strengths
+    user_settings.backgroundfilterstrength.forEach((x, i) => {
+        document.getElementById("backgroundfilterstrength" + (i + 1)).value = x;
+    });
+
+    //Start up image options
+    if (user_settings.staticbackground) {
+        document.getElementById("startupbackgroundcheckmark").setAttribute("checked", '');
+    }
+    document.getElementById("startupimageinput").value = user_settings.staticbackgroundid;
+    document.getElementById("current_image_number").innerHTML = img_number;
 
     document.getElementById("clockfontsize").value = user_settings.clock_font_size;
     document.getElementById("changeminutesinput").value = user_settings.autobackgroundtime;
@@ -304,6 +392,7 @@ function copyURL() {
 function helpModelContent() {
     document.getElementById("modaltext").innerHTML = "<p class='space12'> By <a href='https://github.com/arces' target='_blank'>Dan Janes</a>  ( with some help from <a href='https://github.com/taeganwarren' target='_blank'> Taegan Warren</a> )</p>" +
         "<br class='wholeline'><p class='space12'>Inspired by 8bitdash.com When the site stopped working a year or so back, we decided to make our own. After a long break we are back and active.</p>" +
+        "<br class='wholeline'><p class='space12'>No Ads!  No Tracking!  Just 8 bit backgrounds!     (Unlike 8bitdash.com ;P Sorry not sorry)</p>" +
         "<br class='wholeline'><p class='space12'>App Version: " + app_version_num + "</p>" +
         "<br class='wholeline'><p class='space12'>Save Version: " + app_save_version + "</p>" +
         "<br class='wholeline'><br class='wholeline'> <p class='space12'>Want to get in contact? <a href='mailto:contact@8bitdashboard.com'>Have a new feature suggestion or want your art on here?</a> </p>";
@@ -326,6 +415,11 @@ function saveBTN() {
     user_settings.clock_font_size = document.getElementById("clockfontsize").value;
     validateinput(document.getElementById("greetingfontsize"));
     user_settings.greetingfontsize = document.getElementById("greetingfontsize").value;
+    user_settings.backgroundfilter = [document.getElementById("filterscheckmark1").checked, document.getElementById("filterscheckmark2").checked, document.getElementById("filterscheckmark3").checked];
+    user_settings.backgroundfilterpick = [document.getElementById("filterlist1").value, document.getElementById("filterlist2").value, document.getElementById("filterlist3").value];
+    user_settings.backgroundfilterstrength = [document.getElementById("backgroundfilterstrength1").value, document.getElementById("backgroundfilterstrength2").value, document.getElementById("backgroundfilterstrength3").value];
+    user_settings.staticbackground = document.getElementById("startupbackgroundcheckmark").checked;
+    user_settings.staticbackgroundid = document.getElementById("startupimageinput").value;
 
     let shortcut_urls = document.getElementsByClassName("shortcutvalue");
     let shortcut_keys = document.getElementsByClassName("shortcutkey");
@@ -381,13 +475,21 @@ function applyUserSettings() {
     tmp_font_size = user_settings.greetingfontsize * default_greeting_font_size;
     document.getElementById("greeting").style.fontSize = tmp_font_size + "em";
 
+    //Check if first run
+    if (first_run) {
+        //Set Saved background
+        if (user_settings.staticbackground) {
+            setImageNum(parseInt(user_settings.staticbackgroundid));
+        }
+        first_run = false;
+    }
+
 
     //Background auto changer
     autoChangeBackground();
 
-    if (true) {
+    backgroundfilters(true);
 
-    }
 
     getSetTime();
 }
@@ -403,9 +505,61 @@ function applyUserSettings() {
 *********************************************************************************
  */
 
+function backgroundfilters(useUserSavedSettings = false) {
+
+    let bgfilterOn, bgPick, bgStrength
+    if (useUserSavedSettings) {
+        bgfilterOn = user_settings.backgroundfilter;
+        bgPick = user_settings.backgroundfilterpick;
+        bgStrength = user_settings.backgroundfilterstrength;
+    } else {
+        bgfilterOn = Array.from(document.getElementsByClassName("filtercheckmark")).map(i => i.checked);
+        bgPick = Array.from(document.getElementsByClassName("filterlist")).map(i => i.value);
+        bgStrength = Array.from(document.getElementsByClassName("filterstrength")).map(i => i.value);
+    }
+    //Backgound filter
+    let runningFilter = ""
+    let background = document.getElementById("background")
+    let anyBackgroundsOn = false;
+
+
+    //Loop through the background picks
+    for (let i = 0; i < bgfilterOn.length; i++) {
+        if (bgfilterOn[i]) {
+            anyBackgroundsOn = true;
+            if (bgPick[i] === 'blur') {
+                runningFilter += "blur(" + bgStrength[i] + "px)"
+            } else if (bgPick[i] === 'brightness') {
+                runningFilter += "brightness(" + bgStrength[i] + "%)"
+            } else if (bgPick[i] === 'contrast') {
+                runningFilter += "contrast(" + bgStrength[i] + "0%)"
+            } else if (bgPick[i] === 'grayscale') {
+                runningFilter += "grayscale(" + bgStrength[i] + "%)"
+            } else if (bgPick[i] === 'hue-rotate') {
+                runningFilter += "hue-rotate(" + bgStrength[i] * 3.6 + "deg)"
+            } else if (bgPick[i] === 'invert') {
+                runningFilter += "invert(" + bgStrength[i] + "%)"
+            } else if (bgPick[i] === 'opacity') {
+                runningFilter += "opacity(" + bgStrength[i] + "%)"
+            } else if (bgPick[i] === 'saturate') {
+                runningFilter += "saturate(" + bgStrength[i] * 5 + "%)"
+            } else if (bgPick[i] === 'sepia') {
+                runningFilter += "sepia(" + bgStrength[i] + "%)"
+            }
+        }
+    }//End of background picks loop
+
+
+    if (anyBackgroundsOn) {
+        background.style.filter = runningFilter;
+    } else {
+        background.style.filter = "";
+    }
+}
+
 function validateinput(inputid) {
     let idname = inputid.id;
-    if (idname == "changeminutesinput") {
+    if (idname === "changeminutesinput") {
         let tmpelement = document.getElementById("changeminutesinput");
         let tmpvalue = tmpelement.value;
         if (tmpvalue > 1440) {
@@ -413,7 +567,7 @@ function validateinput(inputid) {
         } else if (tmpvalue < .5) {
             tmpelement.value = .5;
         }
-    } else if (idname == "greetingfontsize") {
+    } else if (idname === "greetingfontsize") {
         let tmpelement = document.getElementById("greetingfontsize");
         let tmpvalue = tmpelement.value;
         if (tmpvalue > 3) {
@@ -421,13 +575,29 @@ function validateinput(inputid) {
         } else if (tmpvalue < .5) {
             tmpelement.value = .5;
         }
-    } else if (idname == "clockfontsize") {
+    } else if (idname === "clockfontsize") {
         let tmpelement = document.getElementById("clockfontsize");
         let tmpvalue = tmpelement.value;
         if (tmpvalue > 3) {
             tmpelement.value = 3;
         } else if (tmpvalue < .5) {
             tmpelement.value = .5;
+        }
+    } else if (idname.includes("backgroundfilterstrength")) {
+        let tmpelement = document.getElementById(idname);
+        let tmpvalue = tmpelement.value;
+        if (tmpvalue > 100) {
+            tmpelement.value = 100;
+        } else if (tmpvalue < 1) {
+            tmpelement.value = 1;
+        }
+    } else if (idname === "startupimageinput") {
+        let tmpelement = document.getElementById("startupimageinput");
+        let tmpvalue = tmpelement.value;
+        if (tmpvalue > images.length) {
+            tmpelement.value = images.length - 1;
+        } else if (tmpvalue < 1) {
+            tmpelement.value = 1;
         }
     }
 }
@@ -478,6 +648,12 @@ function setRandomImage() {
     image = getRandomImage();
     document.getElementById("background").style.backgroundImage = "url('" + image[0] + "')";
     updateArtistAttr(image);
+
+    //The element may be null because it is not inserted into the dom till later
+    let tmp = document.getElementById("current_image_number");
+    if (tmp) {
+        tmp.innerText = img_number;
+    }
 }
 
 //Sets Image based off a given number
@@ -486,6 +662,12 @@ function setImageNum(Num) {
         img_number = Num;
         document.getElementById("background").style.backgroundImage = "url('" + images[Num][0] + "')";
         updateArtistAttr(images[Num]);
+
+        //The element may be null because it is not inserted into the dom till lat
+        let tmp = document.getElementById("current_image_number");
+        if (tmp) {
+            tmp.innerText = img_number;
+        }
     }
 }
 
@@ -538,17 +720,26 @@ function closemodel() {
     modal_active = false;
 }
 
+//Opens a link!
 function openlink(link, tab) {
     if (!modal_active) {
         window.open(link, tab);
     }
 }
 
+//Function that adds a new line to the user shortcuts in the model
 function newshortcut() {
     let shortcutvalues = document.getElementsByClassName("shortcutvaluespacer");
-    shortcutvalues[shortcutvalues.length - 1].insertAdjacentHTML('afterend', "<input value='' class='shortcutkey left-side'> <input value='' class='shortcutvalue right-side'> <div class='wholeline'></div>");
+    shortcutvalues[shortcutvalues.length - 1].insertAdjacentHTML('afterend', "<input value='' class='shortcutkey left-side'> <input value='' class='shortcutvalue' title='Shortcut Website'> <div class='X-button' onclick='delete_shortcut(this)'>X</div> <div class='wholeline shortcutvaluespacer'></div>");
 }
 
+//Deletes a shortcut from the page
+function delete_shortcut(element) {
+    element.previousElementSibling.previousElementSibling.previousElementSibling.remove();
+    element.previousElementSibling.previousElementSibling.remove();
+    element.previousElementSibling.remove();
+    element.remove();
+}
 
 //Applys the shortcuts
 function shortcuts() {
@@ -703,9 +894,9 @@ function setupUserSettings() {
             }
         }
 
-        try{
+        try {
             initial_save_version = tmp_settings.version;
-        }catch (e){
+        } catch (e) {
             //Might be null
             initial_save_version = app_save_version;
         }
@@ -732,6 +923,7 @@ function setupUserSettings() {
         else {
             let tmp_version = tmp_settings.version;
 
+            //Keep migrating while its not the most up to date save version
             while (tmp_version < app_save_version) {
                 tmp_settings = upgradeUserSettings(tmp_version, tmp_settings);
                 tmp_version = tmp_settings.version;
@@ -748,6 +940,8 @@ function setupUserSettings() {
                 applyDecodedUserSettings(tmp_settings);
             }
 
+            //We need to save the user settings so they don't have to change things in the menu. Makes it nicer and cleaner
+            saveUserSettings();
         }
 
         //Last thing to do, apply the settings
@@ -801,8 +995,15 @@ function upgradeUserSettings(version, user_settings) {
         user_settings.autochangebackgroundtime = 1;
         user_settings.autochangebackground = false;
         user_settings.version = 1.1;
-        return user_settings;
+    } else if (version == 1.1) {
+        user_settings.backgroundfilter = [false, false, false];
+        user_settings.backgroundfilterpick = ["blur", "blur", "blur"];
+        user_settings.backgroundfilterstrength = [1, 1, 1];
+        user_settings.staticbackground = false;
+        user_settings.staticbackgroundid = 1;
+        user_settings.version = 1.2;
     }
+    return user_settings;
 }
 
 //Encodes the user settings in base64, but only the actual settings, not their key:value pairs. Saves a shit ton of space!
@@ -814,12 +1015,12 @@ function encodeUserSettings(saveshortcuts = false, manualObj = {}) {
         settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({
             name,
             value
-        })), user_settings.version, user_settings.random_seek, user_settings.clock_font_size, user_settings.greetingfontsize, user_settings.clock_color, user_settings.greeting_color, user_settings.hide_greetings, user_settings.hide_clock, user_settings.text_shadows, user_settings.clock24hr, user_settings.autochangebackground, user_settings.autobackgroundtime];
+        })), user_settings.version, user_settings.random_seek, user_settings.clock_font_size, user_settings.greetingfontsize, user_settings.clock_color, user_settings.greeting_color, user_settings.hide_greetings, user_settings.hide_clock, user_settings.text_shadows, user_settings.clock24hr, user_settings.autochangebackground, user_settings.autobackgroundtime, user_settings.backgroundfilter, user_settings.backgroundfilterpick, user_settings.backgroundfilterstrength, user_settings.staticbackground, user_settings.staticbackgroundid];
     } else {
         settings_arr = [Array.from(user_shortcut_map, ([name, value]) => ({
             name,
             value
-        })), manualObj.version, manualObj.random_seek, manualObj.clock_font_size, manualObj.greetingfontsize, manualObj.clock_color, manualObj.greeting_color, manualObj.hide_greetings, manualObj.hide_clock, manualObj.text_shadows, manualObj.clock24hr, manualObj.autochangebackground, manualObj.autobackgroundtime];
+        })), manualObj.version, manualObj.random_seek, manualObj.clock_font_size, manualObj.greetingfontsize, manualObj.clock_color, manualObj.greeting_color, manualObj.hide_greetings, manualObj.hide_clock, manualObj.text_shadows, manualObj.clock24hr, manualObj.autochangebackground, manualObj.autobackgroundtime, manualObj.backgroundfilter, manualObj.backgroundfilterpick, manualObj.backgroundfilterstrength, manualObj.staticbackground, manualObj.staticbackgroundid];
     }
     if (!saveshortcuts) {
         settings_arr[0] = null;
@@ -853,8 +1054,18 @@ function decodeUserSettings(encodedSettings, returnObj = true) {
                     value
                 }));
             }
-            //Create a new object and return it
-            return new user_settings_obj(tmp_user_settings[0], tmp_user_settings[1], tmp_user_settings[2], tmp_user_settings[3], tmp_user_settings[4], tmp_user_settings[5], tmp_user_settings[6], tmp_user_settings[7], tmp_user_settings[8], tmp_user_settings[9], tmp_user_settings[10], tmp_user_settings[11], tmp_user_settings[12]);
+            //If the link is the old 1.1 save version
+            if(tmp_user_settings[1]==1.1){
+                //Create a new object and return it
+                return new user_settings_obj(tmp_user_settings[0], tmp_user_settings[1], tmp_user_settings[2], tmp_user_settings[3], tmp_user_settings[4], tmp_user_settings[5], tmp_user_settings[6], tmp_user_settings[7], tmp_user_settings[8], tmp_user_settings[9], tmp_user_settings[10], tmp_user_settings[11], tmp_user_settings[12]);
+
+            }else{
+                //More up to date 1.2 save version
+
+                //Create a new object and return it
+                return new user_settings_obj(tmp_user_settings[0], tmp_user_settings[1], tmp_user_settings[2], tmp_user_settings[3], tmp_user_settings[4], tmp_user_settings[5], tmp_user_settings[6], tmp_user_settings[7], tmp_user_settings[8], tmp_user_settings[9], tmp_user_settings[10], tmp_user_settings[11], tmp_user_settings[12],tmp_user_settings[13],tmp_user_settings[14],tmp_user_settings[15],tmp_user_settings[16],tmp_user_settings[17]);
+
+            }
 
         } catch (e) {
             console.log(e);

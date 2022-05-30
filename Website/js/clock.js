@@ -1,4 +1,3 @@
-
 //Gets and sets the time
 //Sets the time based off of the users preference
 function getSetTime() {

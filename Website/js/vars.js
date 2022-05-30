@@ -4,11 +4,12 @@ var image;
 var img_number;
 var modal_active = false;
 var user_settings = null;
+var first_run = true;
 const local_storage_supported = typeof (Storage) !== "undefined";
 const default_clock_font_size = 4;
 const default_greeting_font_size = 2;
-const app_save_version = 1.1
-const app_version_num = 1.3
+const app_save_version = 1.2
+const app_version_num = 1.5
 var auto_change_background_active = false;
 var auto_change_background_time = 0;
 const debug = true;
@@ -18,7 +19,7 @@ var initial_save_version = 0;
 
 
 var user_settings_obj = class {
-    constructor(users_shortcuts, save_version = app_save_version, random_seek = false, clock_font_size = 1, greeting_font_size = 1, clock_color = "#FFFFFFFF", greeting_color = "#FFFFFFFF", hide_greetings = false, hide_clock = false, text_shadows = true, clock24hr = false, autochangebackground = false,autochangebackgroundtime = 1) {
+    constructor(users_shortcuts, save_version = app_save_version, random_seek = false, clock_font_size = 1, greeting_font_size = 1, clock_color = "#FFFFFFFF", greeting_color = "#FFFFFFFF", hide_greetings = false, hide_clock = false, text_shadows = true, clock24hr = false, autochangebackground = false, autochangebackgroundtime = 1, backgroundfilter = [false, false, false], backgroundfilterpick = ["blur", "blur", "blur"], backgroundfilterstrength = [1, 1, 1], staticbackground = false, staticbackgroundid = 1) {
         this.version = save_version;
         this.random_seek = random_seek;
         this.clock_font_size = clock_font_size;
@@ -32,9 +33,14 @@ var user_settings_obj = class {
         this.clock24hr = clock24hr;
         this.autobackgroundtime = autochangebackgroundtime;
         this.autochangebackground = autochangebackground;
+        this.backgroundfilter = backgroundfilter;
+        this.backgroundfilterpick = backgroundfilterpick;
+        this.backgroundfilterstrength = backgroundfilterstrength;
+        this.staticbackground = staticbackground;
+        this.staticbackgroundid = staticbackgroundid;
+
     }
 };
-
 
 
 const default_shortcut_map = new Map([
@@ -43,15 +49,17 @@ const default_shortcut_map = new Map([
     ['f', "https://www.facebook.com"],
     ['y', "https://www.youtube.com"],
     ['m', "https://maps.google.com"],
-    ['s', "https://www.openstreetmap.org/"],
+    ['k', "https://www.tiktok.com/"],
     ['w', "https://www.wikipedia.com"],
-    ['b', "https://www.bing.com"],
+    ['d', "https://djanes.xyz/"],
     ['t', "https://www.twitter.com"],
-    ['d', "https://www.twitch.tv/"],
+    ['b', "https://www.twitch.tv/"],
     ['e', "https://www.ebay.com"],
     ['a', "https://www.amazon.com"],
     ['o', "https://www.google.com"],
-    ['p', "https://www.plex.tv/web"]
+    ['p', "https://www.plex.tv/web"],
+    ['8', "https://8bitdashboard.com/"],
+    ['c', "https://craigslist.org/"]
 ]);
 var background_auto_change_interval = null;
 var user_shortcut_map = default_shortcut_map;
@@ -63,7 +71,9 @@ const artists = [
     ["Valenberg", "https://twitter.com/MrValenberg"],
     ["1041uuu", "https://www.patreon.com/1041uuu"],
     ["PixelJeff", "https://www.deviantart.com/pixeljeff"],
-    ["Minimoss","https://twitter.com/minimossart"]
+    ["Minimoss", "https://twitter.com/minimossart"],
+    ["Into The Rift", "http://www.starsoft.com/IntoTheRift/"],
+    ["Waku Waku 7", "https://snk.fandom.com/wiki/Waku_Waku_7"]
 ];
 
 const images = [
@@ -228,7 +238,11 @@ const images = [
     ['../img/minimoss/storm.webp', 6],
     ['../img/minimoss/zengarden.webp', 6],
     ['../img/minimoss/zengarden2.webp', 6],
-    ['../img/minimoss/window.webp', 6]
+    ['../img/minimoss/window.webp', 6],
+    ['../img/intotherift/intotherift.webp', 7],
+    ['../img/wakuwaku/japanmorning.webp', 8],
+    ['../img/wakuwaku/japanafternoon.webp', 8],
+    ['../img/wakuwaku/japannight.webp', 8]
 ];
 
 var number_of_imgs = images.length;

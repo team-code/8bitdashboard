@@ -19,9 +19,9 @@ function encodeUserSettings2048(saveshortcuts = false) {
 function decodeUserSettings2048(encodedSettings, urlDecodeNeeded = false) {
     try {
         let string = '';
-        if (urlDecodeNeeded){
+        if (urlDecodeNeeded) {
             string = new TextDecoder().decode(decode(decodeURIComponent(encodedSettings)));
-        }else{
+        } else {
             string = new TextDecoder().decode(decode(encodedSettings));
         }
         return JSON.parse(string);

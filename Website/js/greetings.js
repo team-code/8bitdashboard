@@ -28,7 +28,7 @@ const night_greetings = [
 ];
 
 //Generate a random number
-function generateNum(max, min=0){
+function generateNum(max, min = 0) {
     return Math.floor(Math.random() * max) + min;
 
 }
@@ -52,7 +52,7 @@ function setGreeting() {
 
 
 //Returns if its time to change the greeting, also can call set greeting by inself if passed a true
-function timeToChangeGreeting(setGreetingvar = false){
+function timeToChangeGreeting(setGreetingvar = false) {
     let greeting = document.getElementById("greeting").innerText;
     let result = false;
     let time = new Date();
@@ -68,7 +68,7 @@ function timeToChangeGreeting(setGreetingvar = false){
         result = !night_greetings.includes(greeting);
     }
 
-    if(setGreetingvar && result){
+    if (setGreetingvar && result) {
         setGreeting();
     }
     return result;
