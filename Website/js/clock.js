@@ -6,7 +6,7 @@ function getSetTime() {
     document.getElementById("clock").innerHTML = time.toLocaleString('en-US', {
         hour: 'numeric',
         minute: 'numeric',
-        hour12: !hours24
+        hourCycle: hours24 ? 'h23' : 'h12'
     });
     return time;
 }
