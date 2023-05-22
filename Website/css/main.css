@@ -1,320 +1,319 @@
 @font-face {
-    font-family: minecraft;
-    src: url('../font/minecraftfont.woff2');
+  font-family: minecraft;
+  src: url("../font/minecraftfont.woff2");
 }
 
 * {
-    font-family: minecraft;
-    margin: 0;
-    padding: 0;
+  font-family: minecraft;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background-color: black;
+  background-color: black;
 }
 
 #showcase {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 1em;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1em;
 }
 
-#author, #settings, #help, #discord {
-    position: fixed;
-    bottom: 1em;
-    color: white;
+#author,
+#settings,
+#help,
+#discord {
+  position: fixed;
+  bottom: 1em;
+  color: white;
 }
 
 #author {
-    left: 1em;
-
+  left: 1em;
 }
 
 #settings {
-    right: 5em;
-    text-decoration: underline;
-    cursor: pointer;
-
+  right: 5em;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #help {
-    text-decoration: underline;
-    cursor: pointer;
-    right: 1em;
+  text-decoration: underline;
+  cursor: pointer;
+  right: 1em;
 }
 
 #discord {
-    text-decoration: underline;
-    cursor: pointer;
-    right: 12em;
-    text-shadow: 0 0 2px #a6cece;
-    color: #5865F2;
+  text-decoration: underline;
+  cursor: pointer;
+  right: 12em;
+  text-shadow: 0 0 2px #a6cece;
+  color: #5865f2;
 }
 
 #showcase #clock {
-    font-size: 4em;
-    color: white;
-    text-shadow: 2px 2px 1px black;
+  font-size: 4em;
+  color: white;
+  text-shadow: 2px 2px 1px black;
 }
 
 #showcase #greeting {
-    font-size: 2em;
-    color: white;
-    text-shadow: 2px 2px 1px black;
+  font-size: 2em;
+  color: white;
+  text-shadow: 2px 2px 1px black;
 }
 
 .numinput {
-    width: 20%;
-    min-width: 80px;
-    height: 30px;
-    font-size: 1em;
-    padding-left: 5px;
+  width: 20%;
+  min-width: 80px;
+  height: 30px;
+  font-size: 1em;
+  padding-left: 5px;
 }
 
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 15; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0); /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.3); /* Black w/ opacity */
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 15; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.3); /* Black w/ opacity */
 }
 
 /* Modal Content */
 .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
 }
 
 #modaltext {
-    overflow: auto;
-    max-height: 75vh;
+  overflow: auto;
+  max-height: 75vh;
 }
 
 /* The Close Button */
 .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    grid-column: span 1;
-    text-align: right;
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  grid-column: span 1;
+  text-align: right;
 }
 
 .close:hover,
 .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .shortcutvalue {
-    grid-column: span 7;
+  grid-column: span 7;
 }
 
 .btn {
-    padding: 10px;
-    font-size: 1em;
-    cursor: pointer;
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
 }
 
 .shortcutkey {
-    width: 30%;
+  width: 30%;
 }
-
 
 /* Grid stuff */
 .container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
 }
 
 .left-side {
-    grid-column: span 4;
+  grid-column: span 4;
 }
 
 .right-side {
-    grid-column: span 8;
+  grid-column: span 8;
 }
 
-
-.X-button{
-    grid-column: span 1;
-    color:red;
-    text-align: center;
-    cursor: pointer;
+.X-button {
+  grid-column: span 1;
+  color: red;
+  text-align: center;
+  cursor: pointer;
 }
 
 .wholeline-autoheight {
-    grid-column: span 12;
+  grid-column: span 12;
 }
 
 .wholeline {
-    grid-column: span 12;
-    height: 1em;
+  grid-column: span 12;
+  height: 1em;
 }
 
 .space1 {
-    grid-column: span 1;
+  grid-column: span 1;
 }
 
 .space2 {
-    grid-column: span 2;
+  grid-column: span 2;
 }
 
 .space3 {
-    grid-column: span 3;
+  grid-column: span 3;
 }
 
 .space4 {
-    grid-column: span 4;
+  grid-column: span 4;
 }
 
 .space5 {
-    grid-column: span 5;
+  grid-column: span 5;
 }
 
 .space6 {
-    grid-column: span 6;
+  grid-column: span 6;
 }
 
 .space7 {
-    grid-column: span 7;
+  grid-column: span 7;
 }
 
 .space8 {
-    grid-column: span 8;
+  grid-column: span 8;
 }
 
 .space9 {
-    grid-column: span 9;
+  grid-column: span 9;
 }
 
 .space10 {
-    grid-column: span 10;
+  grid-column: span 10;
 }
 
 .space11 {
-    grid-column: span 11;
+  grid-column: span 11;
 }
 
 .space12 {
-    grid-column: span 12;
+  grid-column: span 12;
 }
 
 .full-width {
-    width: 100%;
+  width: 100%;
 }
 
 /* Switches  from: https://www.w3schools.com/howto/howto_css_switch.asp*/
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
 }
 
 .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-    background-color: #58d603;
+  background-color: #58d603;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #58d603;
+  box-shadow: 0 0 1px #58d603;
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
 
 /* Rounded sliders */
 .slider.round {
-    border-radius: 34px;
+  border-radius: 34px;
 }
 
 .slider.round:before {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 /* Collapsible style */
 
 .collapsible {
-    background-color: #3f545a;
-    color: white;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
+  background-color: #3f545a;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
 
-    background-image: url("../img/icons/chevron-down.svg");
-    background-position: right 19px center;
-    background-repeat: no-repeat;
-    background-size: 32px;
-
+  background-image: url("../img/icons/chevron-down.svg");
+  background-position: right 19px center;
+  background-repeat: no-repeat;
+  background-size: 32px;
 }
 
-.active, .collapsible:hover {
-    color: white;
-    background-color: #767d86;
+.active,
+.collapsible:hover {
+  color: white;
+  background-color: #767d86;
 }
 
 .active.collapsible {
-    background-image: url("../img/icons/chevron-up.svg");
-    background-color: black;
+  background-image: url("../img/icons/chevron-up.svg");
+  background-color: black;
 }
 
 .content {
-    padding: 0 18px;
-    display: none;
-    overflow: hidden;
-    color: black;
-    background-color: #e0e0e0;
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  color: black;
+  background-color: #e0e0e0;
 }
 
 /*
@@ -322,21 +321,21 @@ Touch Targets for mobile devices
  */
 
 #right_touch_target {
-    position: fixed;
-    top: 10%;
-    right: 0;
-    width: 40%;
-    height: 80%;
-    z-index: 10;
+  position: fixed;
+  top: 10%;
+  right: 0;
+  width: 40%;
+  height: 80%;
+  z-index: 10;
 }
 
 #left_touch_target {
-    position: fixed;
-    top: 10%;
-    left: 0;
-    width: 40%;
-    height: 80%;
-    z-index: 10;
+  position: fixed;
+  top: 10%;
+  left: 0;
+  width: 40%;
+  height: 80%;
+  z-index: 10;
 }
 
 /*
@@ -344,131 +343,126 @@ Filters and colors
  */
 
 .grayscale {
-    filter: grayscale(100%);
+  filter: grayscale(100%);
 }
 
 .blownout {
-    filter: brightness(200%);
+  filter: brightness(200%);
 }
 
 .highcontrast {
-    filter: contrast(150%);
+  filter: contrast(150%);
 }
 
 .inverted {
-    filter: invert(100%);
+  filter: invert(100%);
 }
 
 .sepia {
-    filter: sepia(100%);
+  filter: sepia(100%);
 }
 
 .lightblur {
-    filter: blur(1px);
+  filter: blur(1px);
 }
 
 .heavyblur {
-    filter: blur(4px);
+  filter: blur(4px);
 }
 
 @media only screen and (max-width: 900px) {
+  .left-side {
+    grid-column: span 5;
+  }
 
-    .left-side {
-        grid-column: span 5;
-    }
-
-    .right-side {
-        grid-column: span 7;
-    }
+  .right-side {
+    grid-column: span 7;
+  }
 }
 
 @media only screen and (max-width: 730px) {
-    .shortcutkey {
-        width: 80%;
-    }
+  .shortcutkey {
+    width: 80%;
+  }
 
-    .mobilefullsize {
-        grid-column: span 12;
-    }
+  .mobilefullsize {
+    grid-column: span 12;
+  }
 
-    .btn.mobilefullsize {
-        margin-bottom: 1em;
-    }
+  .btn.mobilefullsize {
+    margin-bottom: 1em;
+  }
 }
 
 @media only screen and (max-width: 500px) {
-    .shortcutkey {
-        width: 100%;
-    }
+  .shortcutkey {
+    width: 100%;
+  }
 
-    .left-side {
-        grid-column: span 12;
-        margin-bottom: 1em;
-    }
+  .left-side {
+    grid-column: span 12;
+    margin-bottom: 1em;
+  }
 
-    .right-side {
-        grid-column: span 12;
-    }
+  .right-side {
+    grid-column: span 12;
+  }
 
-    .mobilefullsize {
-        margin-bottom: 2em;
-    }
+  .mobilefullsize {
+    margin-bottom: 2em;
+  }
 
-    .shortcutkey {
-        height: 2em;
-    }
+  .shortcutkey {
+    height: 2em;
+  }
 
-    .shortcutvalue {
-        margin-bottom: 1em;
-        height: 3em;
-    }
-
+  .shortcutvalue {
+    margin-bottom: 1em;
+    height: 3em;
+  }
 }
 
 @media only screen and (max-width: 420px) {
-
-    #author {
-        top: 1em
-    }
-
+  #author {
+    top: 1em;
+  }
 }
 
 #background {
-    content: "";
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -10;
-    background-size: cover;
-    background-position: center;
-
+  content: "";
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -10;
+  background-size: cover;
+  background-position: center;
 }
 
 .red-font {
-    color: red;
+  color: red;
 }
 
 /*
 Thanks to https://stackoverflow.com/questions/58159123/how-to-replay-this-css-animation-each-time-a-user-clicks for the css help
  */
 .animate {
-    animation: disappear 2s linear;
+  animation: disappear 2s linear;
 }
 
 .copyAlert {
-    opacity: 0;
+  opacity: 0;
 }
 
 @keyframes disappear {
-    3% {
-        opacity: 0;
-    }
-    60% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+  3% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
