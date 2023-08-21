@@ -609,6 +609,7 @@ function backgroundfilters(useUserSavedSettings = false) {
   //Backgound filter
   let runningFilter = "";
   let background = document.getElementById("background");
+  let backgroundVideo = document.getElementById("background-video");
   let anyBackgroundsOn = false;
 
   //Loop through the background picks
@@ -639,8 +640,10 @@ function backgroundfilters(useUserSavedSettings = false) {
 
   if (anyBackgroundsOn) {
     background.style.filter = runningFilter;
+    backgroundVideo.style.filter = runningFilter;
   } else {
     background.style.filter = "";
+    backgroundVideo.style.filter = "";
   }
 }
 
@@ -727,35 +730,52 @@ function setUpModal() {
 //Returns a random Image url
 function getRandomImage() {
   img_number = Math.floor(Math.random() * images.length);
-  return images[img_number];
+  return img_number;
 }
 
 //Sets a random Image url
 function setRandomImage() {
-  image = getRandomImage();
-  document.getElementById("background").style.backgroundImage =
-    "url('" + image[0] + "')";
-  updateArtistAttr(image);
-
-  //The element may be null because it is not inserted into the dom till later
-  let tmp = document.getElementById("current_image_number");
-  if (tmp) {
-    tmp.innerText = img_number;
-  }
+  setImageNum(getRandomImage());
 }
 
 //Sets Image based off a given number
 function setImageNum(Num) {
-  if (Num < number_of_imgs && Num > 0) {
+  if (Num < number_of_imgs && Num >= 0) {
     img_number = Num;
-    document.getElementById("background").style.backgroundImage =
-      "url('" + images[Num][0] + "')";
-    updateArtistAttr(images[Num]);
+    let image_details = images[Num];
+    let background_element = document.getElementById("background");
+    let background_video_element = document.getElementById("background-video");
+    let background_video_source_element = document.getElementById(
+      "background-video-source"
+    );
+    //If the image is a Webp (Gif more or less) then we can set the background image to it
+    if (image_details[2] === 0) {
+      background_element.style.backgroundImage =
+        "url('" + image_details[0] + "')";
+      updateArtistAttr(image_details);
 
-    //The element may be null because it is not inserted into the dom till lat
+      //Show the WEBP background
+      background_element.style.display = "";
+      //Hide the video background
+      background_video_element.style.display = "None";
+    } else {
+      //Else, the image is a video so we need to set the video element to update it and show it
+      background_video_source_element.setAttribute("src", image_details[0]);
+
+      //Need to call .load or the video won't update to the new URL
+      background_video_element.load();
+      updateArtistAttr(image_details);
+      
+
+      background_video_element.style.display = "";
+
+      //Hide the WEBP background
+      background_element.style.display = "None";
+    }
+    //The element may be null because it is not inserted into the dom till later
     let tmp = document.getElementById("current_image_number");
     if (tmp) {
-      tmp.innerText = img_number;
+        tmp.innerText = img_number;
     }
   }
 }

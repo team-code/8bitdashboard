@@ -13,6 +13,18 @@ body {
   background-color: black;
 }
 
+#background-video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -10;
+}
+
 #showcase {
   height: 100vh;
   display: flex;
@@ -30,6 +42,7 @@ body {
   position: fixed;
   bottom: 1em;
   color: white;
+  font-size:1.5em;
 }
 
 #author {
@@ -437,6 +450,7 @@ Filters and colors
   left: 0;
   z-index: -10;
   background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
 }
 

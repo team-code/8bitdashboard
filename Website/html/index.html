@@ -29,14 +29,22 @@
     <script src="../js/greetings.js"></script>
     <link href="../css/main.css" rel="stylesheet" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <script src="../js/jscolor.min.js"></script>
-    <script src="../js/base2048.js"></script>
+    <script src="../js/jscolor.min.js" type="module"></script>
+    <script src="../js/base2048.js" type="module"></script>
   </head>
   <body onload="main()">
     <div id="right_touch_target"></div>
     <div id="left_touch_target"></div>
 
     <div id="background"></div>
+
+    <video id="background-video" autoplay loop muted >
+      <source
+      id="background-video-source"
+        src=""
+        type="video/mp4"
+      />
+    </video>
     <section id="showcase">
       <div id="clock"></div>
       <div id="greeting"></div>
