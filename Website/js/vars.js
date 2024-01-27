@@ -9,7 +9,7 @@ const local_storage_supported = typeof Storage !== "undefined";
 const default_clock_font_size = 4;
 const default_greeting_font_size = 2;
 const app_save_version = 1.2;
-const app_version_num = 1.6;
+const app_version_num = 1.7;
 var auto_change_background_active = false;
 var auto_change_background_time = 0;
 const debug = true;
