@@ -739,7 +739,7 @@ const images = [
   ["../img/waneella/radient.gif", 14, 0],
   ["../img/muscat_dot/drivingcity.mp4", 15, 1],
   ["../img/muscat_dot/floatingcity.mp4", 15, 1],
-  ["../img/muscat_dot/gloatingerror.mp4", 15, 1],
+  ["../img/muscat_dot/floatingerror.mp4", 15, 1],
   ["../img/muscat_dot/girlonbed.mp4", 15, 1],
   ["../img/muscat_dot/highschoollove.mp4", 15, 1],
   ["../img/muscat_dot/schoollove.mp4", 15, 1],
