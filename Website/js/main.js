@@ -5,7 +5,6 @@ let next_random_index = -1;
 function main() {
   setUpModal();
   setupUserSettings(); // Must be before setRandomImage - custom background check needs user_settings
-  setRandomImage();
   getSetTime();
   setGreeting();
   initWeather(); // Initialize weather widget
@@ -579,6 +578,12 @@ function saveBTN() {
   ).checked;
   user_settings.staticbackgroundid =
     document.getElementById("startupimageinput").value;
+  user_settings.staticplaylist = document.getElementById(
+      "startupplaylistcheckmark"
+    ).checked;
+  user_settings.staticplaylistindex = document.getElementById(
+      "startupplaylistselect"
+    ).value;
   user_settings.custom_background_url =
     document.getElementById("custombackgroundurl").value.trim();
 
@@ -689,11 +694,51 @@ function applyUserSettings() {
   document.getElementById("greeting").style.fontSize = tmp_font_size + "em";
 
   //Check if first run
+    //Check if first run
   if (first_run) {
-    //Set Saved background
-    if (user_settings.staticbackground) {
+    //Set Startup Image/Playlist
+    let startupSet = false;
+
+    if (user_settings.staticplaylist) {
+      console.log('Static playlist enabled. Index:', user_settings.staticplaylistindex);
+      // Static Playlist
+      const plIndex = parseInt(user_settings.staticplaylistindex);
+      // Ensure gallerySystem is available
+      if (typeof gallerySystem !== 'undefined') {
+          if (gallerySystem.playlists[plIndex]) {
+            const items = gallerySystem.playlists[plIndex].items;
+            console.log('Playlist found. Items:', items);
+            if (items && items.length > 0) {
+              active_playlist = items;
+              // Pick random start
+              const rnd = Math.floor(Math.random() * items.length);
+              active_playlist_index = rnd;
+              setImageNum(items[rnd]);
+              startupSet = true;
+              console.log('Startup playlist set. Image:', items[rnd]);
+            } else {
+                console.warn('Playlist is empty.');
+            }
+          } else {
+              console.warn('Playlist index not found:', plIndex);
+          }
+      } else {
+          console.error('gallerySystem is undefined during startup');
+      }
+    } 
+    
+    if (!startupSet && user_settings.staticbackground) {
+      // Static Image
       setImageNum(parseInt(user_settings.staticbackgroundid));
+      startupSet = true;
     }
+
+    if (!startupSet) {
+      console.log('Falling back to random image');
+      // Random Image
+      setRandomImage();
+    }
+    
     first_run = false;
   }
 
@@ -1371,6 +1416,13 @@ function upgradeUserSettings(version, user_settings) {
     user_settings.crt_opacity = 100;
     
     user_settings.version = 1.3;
+  } else if (version == 1.3) {
+    // Upgrade to 1.4
+    // Playlist startup settings
+    user_settings.staticplaylist = false;
+    user_settings.staticplaylistindex = 0;
+    
+    user_settings.version = 1.4;
   }
   return user_settings;
 }

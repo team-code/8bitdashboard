@@ -10,7 +10,7 @@ let first_run = true;
 const local_storage_supported = typeof Storage !== "undefined";
 const default_clock_font_size = 4;
 const default_greeting_font_size = 2;
-const app_save_version = 1.3;
+const app_save_version = 1.4;
 const app_version_num = 2;
 let auto_change_background_active = false;
 let auto_change_background_time = 0;
@@ -55,6 +55,9 @@ const UserSettings = class {
     pomodoro_sound = true,
     // Notepad settings
     show_notepad = false,
+    // Playlist startup settings
+    staticplaylist = false,
+    staticplaylistindex = 0,
     // Custom background URL
     custom_background_url = '',
     // CRT effect setting
@@ -79,6 +82,9 @@ const UserSettings = class {
     this.backgroundfilterstrength = backgroundfilterstrength;
     this.staticbackground = staticbackground;
     this.staticbackgroundid = staticbackgroundid;
+    // Playlist startup settings
+    this.staticplaylist = staticplaylist;
+    this.staticplaylistindex = staticplaylistindex;
     // Weather settings
     this.show_weather = show_weather;
     this.weather_fahrenheit = weather_fahrenheit;

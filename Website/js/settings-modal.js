@@ -298,7 +298,18 @@ function buildGreetingSection() {
  * Builds the background settings section
  * @returns {string} HTML string
  */
+function buildPlaylistOptions() {
+  if (typeof gallerySystem === 'undefined' || !gallerySystem.playlists) return '<option value="">No Playlists Found</option>';
+  if (gallerySystem.playlists.length === 0) return '<option value="">No Playlists Created</option>';
+  
+  return gallerySystem.playlists.map((pl, index) => 
+    `<option value="${index}">${escapeHtml(pl.name)} (${pl.items.length})</option>`
+  ).join('');
+}
+
 function buildBackgroundSection() {
+  const playlistOptions = buildPlaylistOptions();
+
   return `
     <details class="group">
       <summary class="flex items-center justify-between p-4 bg-gray-800 hover:bg-gray-700 cursor-pointer rounded-lg transition-colors">
@@ -335,9 +346,21 @@ function buildBackgroundSection() {
           </label>
         </div>
         <div class="flex items-center justify-between">
-          <label for="startupimageinput" class="text-gray-300">Startup Image #</label>
           <input type="number" id="startupimageinput" min="1" step="1" value="1" 
                  class="w-20 px-2 py-2 bg-gray-700 border border-gray-600 rounded text-white text-center focus:ring-2 focus:ring-purple-500">
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="text-gray-300">Fixed Startup Playlist</label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="startupplaylistcheckmark" class="sr-only peer">
+            <div class="w-14 h-8 bg-gray-600 peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer peer-checked:after:translate-x-6 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500"></div>
+          </label>
+        </div>
+        <div id="startup-playlist-row" class="flex items-center justify-between" style="display:none;">
+          <label for="startupplaylistselect" class="text-gray-300">Select Playlist</label>
+          <select id="startupplaylistselect" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:ring-2 focus:ring-purple-500">
+            ${playlistOptions}
+          </select>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-gray-300">Current Image #</span>
@@ -643,6 +666,15 @@ function populateSettingsValues() {
     document.getElementById('startupbackgroundcheckmark').checked = true;
   }
   document.getElementById('startupimageinput').value = user_settings.staticbackgroundid;
+  
+  if (user_settings.staticplaylist) {
+    document.getElementById('startupplaylistcheckmark').checked = true;
+    document.getElementById('startup-playlist-row').style.display = 'flex';
+  }
+  if (user_settings.staticplaylistindex !== undefined) {
+    document.getElementById('startupplaylistselect').value = user_settings.staticplaylistindex;
+  }
+  
   document.getElementById('current_image_number').textContent = img_number;
   document.getElementById('custombackgroundurl').value = user_settings.custom_background_url || '';
 
@@ -699,6 +731,22 @@ function setupSettingsListeners() {
     if (e.target.id === 'autochangebackgroundcheckmark') {
       const row = document.getElementById('autochange-minutes-row');
       if (row) row.style.display = e.target.checked ? 'flex' : 'none';
+    }
+    if (e.target.id === 'startupplaylistcheckmark') {
+      const row = document.getElementById('startup-playlist-row');
+      if (row) row.style.display = e.target.checked ? 'flex' : 'none';
+      if (e.target.checked) {
+         // Auto-uncheck fixed static background if playlist is selected to avoid confusion
+         const staticBgCheck = document.getElementById('startupbackgroundcheckmark');
+         if(staticBgCheck && staticBgCheck.checked) staticBgCheck.click();
+      }
+    }
+    if (e.target.id === 'startupbackgroundcheckmark') {
+      if (e.target.checked) {
+         // Auto-uncheck playlist if static background is selected
+         const playlistCheck = document.getElementById('startupplaylistcheckmark');
+         if(playlistCheck && playlistCheck.checked) playlistCheck.click();
+      }
     }
   });
   
