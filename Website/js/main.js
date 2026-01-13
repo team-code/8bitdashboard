@@ -617,6 +617,21 @@ function saveBTN() {
     }
   }
 
+  // Apply playlist changes immediately
+  if (user_settings.staticplaylist) {
+      if (typeof gallerySystem !== 'undefined' && gallerySystem.playlists) {
+          const plIndex = parseInt(user_settings.staticplaylistindex);
+          if (gallerySystem.playlists[plIndex]) {
+              active_playlist = gallerySystem.playlists[plIndex].items;
+              active_playlist_index = 0;
+              next_random_index = -1; // Reset preloaded random image
+          }
+      }
+  } else {
+      active_playlist = null;
+      next_random_index = -1;
+  }
+
   saveUserSettings();
   applyUserSettings();
   refreshWeather(); // Refresh weather with new settings (clears cache first)
