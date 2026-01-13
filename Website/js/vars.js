@@ -1,23 +1,25 @@
 //Settings and vars
-var time;
-var image;
-var img_number;
-var modal_active = false;
-var user_settings = null;
-var first_run = true;
+let time;
+let image;
+let img_number;
+let active_playlist = null; // null or array of image indices
+let active_playlist_index = 0; // Current position in playlist
+let modal_active = false;
+let user_settings = null;
+let first_run = true;
 const local_storage_supported = typeof Storage !== "undefined";
 const default_clock_font_size = 4;
 const default_greeting_font_size = 2;
-const app_save_version = 1.2;
-const app_version_num = 1.7;
-var auto_change_background_active = false;
-var auto_change_background_time = 0;
+const app_save_version = 1.3;
+const app_version_num = 2;
+let auto_change_background_active = false;
+let auto_change_background_time = 0;
 const debug = true;
 const prod_url = "https://8bitdashboard.com/";
 const local_url = "http://127.0.0.1/8bitdashboard/Website/html/";
-var initial_save_version = 0;
+let initial_save_version = 0;
 
-var user_settings_obj = class {
+const UserSettings = class {
   constructor(
     users_shortcuts,
     save_version = app_save_version,
@@ -36,7 +38,28 @@ var user_settings_obj = class {
     backgroundfilterpick = ["blur", "blur", "blur"],
     backgroundfilterstrength = [1, 1, 1],
     staticbackground = false,
-    staticbackgroundid = 1
+    staticbackgroundid = 1,
+    // New weather settings
+    show_weather = false,
+    weather_fahrenheit = false,
+    weather_lat = null,
+    weather_lon = null,
+    // Search settings
+    show_search = true,
+    search_engine = 'duckduckgo',
+    // Pomodoro settings
+    show_pomodoro = true,
+    pomodoro_work_time = 25,
+    pomodoro_break_time = 5,
+    pomodoro_long_break_time = 15,
+    pomodoro_sound = true,
+    // Notepad settings
+    show_notepad = false,
+    // Custom background URL
+    custom_background_url = '',
+    // CRT effect setting
+    crt_effect = false,
+    crt_opacity = 100
   ) {
     this.version = save_version;
     this.random_seek = random_seek;
@@ -56,6 +79,27 @@ var user_settings_obj = class {
     this.backgroundfilterstrength = backgroundfilterstrength;
     this.staticbackground = staticbackground;
     this.staticbackgroundid = staticbackgroundid;
+    // Weather settings
+    this.show_weather = show_weather;
+    this.weather_fahrenheit = weather_fahrenheit;
+    this.weather_lat = weather_lat;
+    this.weather_lon = weather_lon;
+    // Search settings
+    this.show_search = show_search;
+    this.search_engine = search_engine;
+    // Pomodoro settings
+    this.show_pomodoro = show_pomodoro;
+    this.pomodoro_work_time = pomodoro_work_time;
+    this.pomodoro_break_time = pomodoro_break_time;
+    this.pomodoro_long_break_time = pomodoro_long_break_time;
+    this.pomodoro_sound = pomodoro_sound;
+    // Notepad settings
+    this.show_notepad = show_notepad;
+    // Custom background URL
+    this.custom_background_url = custom_background_url;
+    // CRT effect setting
+    this.crt_effect = crt_effect;
+    this.crt_opacity = crt_opacity;
   }
 };
 
@@ -77,8 +121,8 @@ const default_shortcut_map = new Map([
   ["8", "https://8bitdashboard.com/"],
   ["c", "https://craigslist.org/"],
 ]);
-var background_auto_change_interval = null;
-var user_shortcut_map = default_shortcut_map;
+let background_auto_change_interval = null;
+let user_shortcut_map = default_shortcut_map;
 
 /*
 0 = Kirokaze
@@ -98,6 +142,15 @@ var user_shortcut_map = default_shortcut_map;
 14 = waneella
 15 = muscat_dot
 16 = KillerRabbitMedia
+17 = A火ゆ
+18 = DawnMoonles
+19 = APO+
+20 = archipics
+21 = 5ldo0on
+22 = JPtomsZ
+23 = kroim
+24 = Nihao
+25 = たかはし
 */
 const artists = [
   ["Kirokaze", "https://www.patreon.com/kirokaze"],
@@ -120,6 +173,16 @@ const artists = [
     "KillerRabbitMedia",
     "https://www.reddit.com/user/KillerRabbitMedia/submitted/",
   ],
+  ["A火ゆ", "https://x.com/Akayu_Pixel"],
+  ["DawnMoonles", "https://x.com/DawnMoonles"],
+  ["APO+", "https://x.com/APO_PLUS_"],
+  ["archipics", "https://www.deviantart.com/archipics"],
+  ["5ldo0on", "https://www.deviantart.com/5ldo0on"],
+  ["JPtomsZ", "https://x.com/JPtomsZ"],
+  ["kroim", "https://x.com/kroimmm"],
+  ["Nihao", "https://www.artstation.com/nihao_pixelart"],
+  ["たかはし", "https://x.com/t_5385"],
+
 ];
 
 //[Img Url, Artist Index, 0 = WEBP/GIF 1 = MP4]
@@ -813,9 +876,355 @@ const images = [
   ["../img/krm/wfh.mp4", 16, 1],
   ["../img/krm/yesterday.mp4", 16, 1],
   ["../img/krm/dust9.gif", 16, 0],
-
-
-
+["../img/1041uuu/barber.webp", 4, 0],
+  ["../img/1041uuu/catmagic.webp", 4, 0],
+  ["../img/1041uuu/river.webp", 4, 0],
+  ["../img/1041uuu/traffic.webp", 4, 0],
+  ["../img/5ldo0on/1.gif", 21, 0],
+  ["../img/5ldo0on/10.gif", 21, 0],
+  ["../img/5ldo0on/11.gif", 21, 0],
+  ["../img/5ldo0on/12.gif", 21, 0],
+  ["../img/5ldo0on/13.gif", 21, 0],
+  ["../img/5ldo0on/14.gif", 21, 0],
+  ["../img/5ldo0on/15.gif", 21, 0],
+  ["../img/5ldo0on/16.gif", 21, 0],
+  ["../img/5ldo0on/17.gif", 21, 0],
+  ["../img/5ldo0on/18.gif", 21, 0],
+  ["../img/5ldo0on/19.gif", 21, 0],
+  ["../img/5ldo0on/2.gif", 21, 0],
+  ["../img/5ldo0on/20.gif", 21, 0],
+  ["../img/5ldo0on/21.gif", 21, 0],
+  ["../img/5ldo0on/22.gif", 21, 0],
+  ["../img/5ldo0on/23.gif", 21, 0],
+  ["../img/5ldo0on/24.gif", 21, 0],
+  ["../img/5ldo0on/25.gif", 21, 0],
+  ["../img/5ldo0on/26.gif", 21, 0],
+  ["../img/5ldo0on/27.gif", 21, 0],
+  ["../img/5ldo0on/28.gif", 21, 0],
+  ["../img/5ldo0on/29.gif", 21, 0],
+  ["../img/5ldo0on/3.gif", 21, 0],
+  ["../img/5ldo0on/30.gif", 21, 0],
+  ["../img/5ldo0on/31.gif", 21, 0],
+  ["../img/5ldo0on/32.gif", 21, 0],
+  ["../img/5ldo0on/33.gif", 21, 0],
+  ["../img/5ldo0on/34.gif", 21, 0],
+  ["../img/5ldo0on/35.gif", 21, 0],
+  ["../img/5ldo0on/36.gif", 21, 0],
+  ["../img/5ldo0on/37.gif", 21, 0],
+  ["../img/5ldo0on/38.gif", 21, 0],
+  ["../img/5ldo0on/4.gif", 21, 0],
+  ["../img/5ldo0on/5.gif", 21, 0],
+  ["../img/5ldo0on/6.gif", 21, 0],
+  ["../img/5ldo0on/7.gif", 21, 0],
+  ["../img/5ldo0on/8.gif", 21, 0],
+  ["../img/5ldo0on/9.gif", 21, 0],
+  ["../img/Akayu_Pixel/1.mp4", 17, 1],
+  ["../img/Akayu_Pixel/10.mp4", 17, 1],
+  ["../img/Akayu_Pixel/11.mp4", 17, 1],
+  ["../img/Akayu_Pixel/12.mp4", 17, 1],
+  ["../img/Akayu_Pixel/13.mp4", 17, 1],
+  ["../img/Akayu_Pixel/14.mp4", 17, 1],
+  ["../img/Akayu_Pixel/15.mp4", 17, 1],
+  ["../img/Akayu_Pixel/16.mp4", 17, 1],
+  ["../img/Akayu_Pixel/17.mp4", 17, 1],
+  ["../img/Akayu_Pixel/18.mp4", 17, 1],
+  ["../img/Akayu_Pixel/19.mp4", 17, 1],
+  ["../img/Akayu_Pixel/2.mp4", 17, 1],
+  ["../img/Akayu_Pixel/20.mp4", 17, 1],
+  ["../img/Akayu_Pixel/21.mp4", 17, 1],
+  ["../img/Akayu_Pixel/22.mp4", 17, 1],
+  ["../img/Akayu_Pixel/23.mp4", 17, 1],
+  ["../img/Akayu_Pixel/24.mp4", 17, 1],
+  ["../img/Akayu_Pixel/25.mp4", 17, 1],
+  ["../img/Akayu_Pixel/26.mp4", 17, 1],
+  ["../img/Akayu_Pixel/27.mp4", 17, 1],
+  ["../img/Akayu_Pixel/28.mp4", 17, 1],
+  ["../img/Akayu_Pixel/29.mp4", 17, 1],
+  ["../img/Akayu_Pixel/3.mp4", 17, 1],
+  ["../img/Akayu_Pixel/30.mp4", 17, 1],
+  ["../img/Akayu_Pixel/31.mp4", 17, 1],
+  ["../img/Akayu_Pixel/32.mp4", 17, 1],
+  ["../img/Akayu_Pixel/33.mp4", 17, 1],
+  ["../img/Akayu_Pixel/34.mp4", 17, 1],
+  ["../img/Akayu_Pixel/35.mp4", 17, 1],
+  ["../img/Akayu_Pixel/36.mp4", 17, 1],
+  ["../img/Akayu_Pixel/37.mp4", 17, 1],
+  ["../img/Akayu_Pixel/38.mp4", 17, 1],
+  ["../img/Akayu_Pixel/39.mp4", 17, 1],
+  ["../img/Akayu_Pixel/4.mp4", 17, 1],
+  ["../img/Akayu_Pixel/40.mp4", 17, 1],
+  ["../img/Akayu_Pixel/41.mp4", 17, 1],
+  ["../img/Akayu_Pixel/42.mp4", 17, 1],
+  ["../img/Akayu_Pixel/43.mp4", 17, 1],
+  ["../img/Akayu_Pixel/44.mp4", 17, 1],
+  ["../img/Akayu_Pixel/45.mp4", 17, 1],
+  ["../img/Akayu_Pixel/46.mp4", 17, 1],
+  ["../img/Akayu_Pixel/47.mp4", 17, 1],
+  ["../img/Akayu_Pixel/48.mp4", 17, 1],
+  ["../img/Akayu_Pixel/49.mp4", 17, 1],
+  ["../img/Akayu_Pixel/5.mp4", 17, 1],
+  ["../img/Akayu_Pixel/50.mp4", 17, 1],
+  ["../img/Akayu_Pixel/51.mp4", 17, 1],
+  ["../img/Akayu_Pixel/52.mp4", 17, 1],
+  ["../img/Akayu_Pixel/53.mp4", 17, 1],
+  ["../img/Akayu_Pixel/6.mp4", 17, 1],
+  ["../img/Akayu_Pixel/7.mp4", 17, 1],
+  ["../img/Akayu_Pixel/8.mp4", 17, 1],
+  ["../img/Akayu_Pixel/9.mp4", 17, 1],
+  ["../img/APO+/1.mp4", 19, 1],
+  ["../img/APO+/10.mp4", 19, 1],
+  ["../img/APO+/11.mp4", 19, 1],
+  ["../img/APO+/12.mp4", 19, 1],
+  ["../img/APO+/13.mp4", 19, 1],
+  ["../img/APO+/14.mp4", 19, 1],
+  ["../img/APO+/15.mp4", 19, 1],
+  ["../img/APO+/16.mp4", 19, 1],
+  ["../img/APO+/17.mp4", 19, 1],
+  ["../img/APO+/18.mp4", 19, 1],
+  ["../img/APO+/19.mp4", 19, 1],
+  ["../img/APO+/2.mp4", 19, 1],
+  ["../img/APO+/20.mp4", 19, 1],
+  ["../img/APO+/21.mp4", 19, 1],
+  ["../img/APO+/22.mp4", 19, 1],
+  ["../img/APO+/23.mp4", 19, 1],
+  ["../img/APO+/24.mp4", 19, 1],
+  ["../img/APO+/25.mp4", 19, 1],
+  ["../img/APO+/26.mp4", 19, 1],
+  ["../img/APO+/27.mp4", 19, 1],
+  ["../img/APO+/28.mp4", 19, 1],
+  ["../img/APO+/29.mp4", 19, 1],
+  ["../img/APO+/3.mp4", 19, 1],
+  ["../img/APO+/30.mp4", 19, 1],
+  ["../img/APO+/31.mp4", 19, 1],
+  ["../img/APO+/32.mp4", 19, 1],
+  ["../img/APO+/33.mp4", 19, 1],
+  ["../img/APO+/34.mp4", 19, 1],
+  ["../img/APO+/35.mp4", 19, 1],
+  ["../img/APO+/36.mp4", 19, 1],
+  ["../img/APO+/4.mp4", 19, 1],
+  ["../img/APO+/5.mp4", 19, 1],
+  ["../img/APO+/6.mp4", 19, 1],
+  ["../img/APO+/7.mp4", 19, 1],
+  ["../img/APO+/8.mp4", 19, 1],
+  ["../img/APO+/9.mp4", 19, 1],
+  ["../img/archipics/1.gif", 20, 0],
+  ["../img/archipics/10.gif", 20, 0],
+  ["../img/archipics/2.gif", 20, 0],
+  ["../img/archipics/3.gif", 20, 0],
+  ["../img/archipics/4.gif", 20, 0],
+  ["../img/archipics/5.gif", 20, 0],
+  ["../img/archipics/6.gif", 20, 0],
+  ["../img/archipics/7.gif", 20, 0],
+  ["../img/archipics/8.gif", 20, 0],
+  ["../img/archipics/9.gif", 20, 0],
+  ["../img/DawnMoonles/1.mp4", 18, 1],
+  ["../img/DawnMoonles/2.mp4", 18, 1],
+  ["../img/DawnMoonles/3.mp4", 18, 1],
+  ["../img/DawnMoonles/4.mp4", 18, 1],
+  ["../img/DawnMoonles/5.mp4", 18, 1],
+  ["../img/DawnMoonles/6.mp4", 18, 1],
+  ["../img/DawnMoonles/7.mp4", 18, 1],
+  ["../img/faxdoc/RAMEN.mp4", 1, 1],
+  ["../img/haopanyo/arceus.mp4", 9, 1],
+  ["../img/haopanyo/benchgirl.mp4", 9, 1],
+  ["../img/haopanyo/Blaziken (1).mp4", 9, 1],
+  ["../img/haopanyo/Blaziken.mp4", 9, 1],
+  ["../img/haopanyo/bluegirl.mp4", 9, 1],
+  ["../img/haopanyo/brokenlabtube.mp4", 9, 1],
+  ["../img/haopanyo/cateargirl.mp4", 9, 1],
+  ["../img/haopanyo/catgirls.mp4", 9, 1],
+  ["../img/haopanyo/chickengirl.mp4", 9, 1],
+  ["../img/haopanyo/cityfight.mp4", 9, 1],
+  ["../img/haopanyo/deadrobot.mp4", 9, 1],
+  ["../img/haopanyo/dragongirl2.mp4", 9, 1],
+  ["../img/haopanyo/draw.mp4", 9, 1],
+  ["../img/haopanyo/fairygirl.mp4", 9, 1],
+  ["../img/haopanyo/halloween carrot.mp4", 9, 1],
+  ["../img/haopanyo/LOZ.mp4", 9, 1],
+  ["../img/haopanyo/macegirl.mp4", 9, 1],
+  ["../img/haopanyo/massiverobot.mp4", 9, 1],
+  ["../img/haopanyo/metroid2.mp4", 9, 1],
+  ["../img/haopanyo/raingirl.mp4", 9, 1],
+  ["../img/haopanyo/requaza.mp4", 9, 1],
+  ["../img/haopanyo/robotstatue.mp4", 9, 1],
+  ["../img/haopanyo/Sceptile (1).mp4", 9, 1],
+  ["../img/haopanyo/Sceptile.mp4", 9, 1],
+  ["../img/haopanyo/summergirl.mp4", 9, 1],
+  ["../img/haopanyo/sushigaming.mp4", 9, 1],
+  ["../img/haopanyo/Swampert (1).mp4", 9, 1],
+  ["../img/haopanyo/Swampert.mp4", 9, 1],
+  ["../img/JPtomsZ/1.mp4", 22, 1],
+  ["../img/JPtomsZ/10.mp4", 22, 1],
+  ["../img/JPtomsZ/11.mp4", 22, 1],
+  ["../img/JPtomsZ/12.mp4", 22, 1],
+  ["../img/JPtomsZ/13.mp4", 22, 1],
+  ["../img/JPtomsZ/14.mp4", 22, 1],
+  ["../img/JPtomsZ/15.mp4", 22, 1],
+  ["../img/JPtomsZ/16.mp4", 22, 1],
+  ["../img/JPtomsZ/17.mp4", 22, 1],
+  ["../img/JPtomsZ/18.mp4", 22, 1],
+  ["../img/JPtomsZ/19.mp4", 22, 1],
+  ["../img/JPtomsZ/2.mp4", 22, 1],
+  ["../img/JPtomsZ/20.mp4", 22, 1],
+  ["../img/JPtomsZ/21.mp4", 22, 1],
+  ["../img/JPtomsZ/22.mp4", 22, 1],
+  ["../img/JPtomsZ/23.mp4", 22, 1],
+  ["../img/JPtomsZ/24.mp4", 22, 1],
+  ["../img/JPtomsZ/25.mp4", 22, 1],
+  ["../img/JPtomsZ/26.mp4", 22, 1],
+  ["../img/JPtomsZ/3.mp4", 22, 1],
+  ["../img/JPtomsZ/4.mp4", 22, 1],
+  ["../img/JPtomsZ/5.mp4", 22, 1],
+  ["../img/JPtomsZ/6.mp4", 22, 1],
+  ["../img/JPtomsZ/7.mp4", 22, 1],
+  ["../img/JPtomsZ/8.mp4", 22, 1],
+  ["../img/JPtomsZ/9.mp4", 22, 1],
+  ["../img/kirokaze/2-screens-2nd-pixel-ANIMx2.gif", 0, 0],
+  ["../img/kirokaze/afterschool_faster120_x3.gif", 0, 0],
+  ["../img/kirokaze/analog_memoriesx3.gif", 0, 0],
+  ["../img/kirokaze/BIG-PUFFER-levianthan-crossing.gif", 0, 0],
+  ["../img/kirokaze/citiy-reflection-PIXEL-ANIMx3.gif", 0, 0],
+  ["../img/kirokaze/elven-lords-pixel-animx3.gif", 0, 0],
+  ["../img/kirokaze/grid-game-pixel-ANIM.gif", 0, 0],
+  ["../img/kirokaze/gundam-rest-PIXEL-ANIM_X3.gif", 0, 0],
+  ["../img/kirokaze/HANGAR-SCENE.gif", 0, 0],
+  ["../img/kirokaze/LATEDRINKX2.gif", 0, 0],
+  ["../img/kirokaze/NIGHT touring-pixel-ANIM-LONGx3.gif", 0, 0],
+  ["../img/kirokaze/ROBOT-DESERT-PIXEL-ANIMx3.gif", 0, 0],
+  ["../img/kirokaze/robot-snow-pixel-ANIMx3.gif", 0, 0],
+  ["../img/kirokaze/testelevator.gif", 0, 0],
+  ["../img/kirokaze/tight-room-PIXEL-ANIM_x2.gif", 0, 0],
+  ["../img/kroim/1.mp4", 23, 1],
+  ["../img/kroim/10.mp4", 23, 1],
+  ["../img/kroim/11.mp4", 23, 1],
+  ["../img/kroim/12.mp4", 23, 1],
+  ["../img/kroim/13.mp4", 23, 1],
+  ["../img/kroim/14.mp4", 23, 1],
+  ["../img/kroim/15.mp4", 23, 1],
+  ["../img/kroim/16.mp4", 23, 1],
+  ["../img/kroim/17.mp4", 23, 1],
+  ["../img/kroim/18.mp4", 23, 1],
+  ["../img/kroim/19.mp4", 23, 1],
+  ["../img/kroim/2.mp4", 23, 1],
+  ["../img/kroim/20.mp4", 23, 1],
+  ["../img/kroim/21.mp4", 23, 1],
+  ["../img/kroim/22.mp4", 23, 1],
+  ["../img/kroim/23.mp4", 23, 1],
+  ["../img/kroim/24.mp4", 23, 1],
+  ["../img/kroim/25.mp4", 23, 1],
+  ["../img/kroim/26.mp4", 23, 1],
+  ["../img/kroim/27.mp4", 23, 1],
+  ["../img/kroim/28.mp4", 23, 1],
+  ["../img/kroim/29.mp4", 23, 1],
+  ["../img/kroim/3.mp4", 23, 1],
+  ["../img/kroim/30.mp4", 23, 1],
+  ["../img/kroim/31.mp4", 23, 1],
+  ["../img/kroim/32.mp4", 23, 1],
+  ["../img/kroim/33.mp4", 23, 1],
+  ["../img/kroim/34.mp4", 23, 1],
+  ["../img/kroim/35.mp4", 23, 1],
+  ["../img/kroim/36.mp4", 23, 1],
+  ["../img/kroim/37.mp4", 23, 1],
+  ["../img/kroim/38.mp4", 23, 1],
+  ["../img/kroim/39.mp4", 23, 1],
+  ["../img/kroim/4.mp4", 23, 1],
+  ["../img/kroim/40.mp4", 23, 1],
+  ["../img/kroim/41.mp4", 23, 1],
+  ["../img/kroim/42.mp4", 23, 1],
+  ["../img/kroim/5.mp4", 23, 1],
+  ["../img/kroim/6.mp4", 23, 1],
+  ["../img/kroim/7.mp4", 23, 1],
+  ["../img/kroim/8.mp4", 23, 1],
+  ["../img/kroim/9.mp4", 23, 1],
+  ["../img/muscat_dot/1.mp4", 15, 1],
+  ["../img/muscat_dot/2.mp4", 15, 1],
+  ["../img/muscat_dot/3.mp4", 15, 1],
+  ["../img/muscat_dot/4.mp4", 15, 1],
+  ["../img/nihao_/1.gif", 24, 0],
+  ["../img/nihao_/10.gif", 24, 0],
+  ["../img/nihao_/11.gif", 24, 0],
+  ["../img/nihao_/12.gif", 24, 0],
+  ["../img/nihao_/13.gif", 24, 0],
+  ["../img/nihao_/14.gif", 24, 0],
+  ["../img/nihao_/15.gif", 24, 0],
+  ["../img/nihao_/16.gif", 24, 0],
+  ["../img/nihao_/17.gif", 24, 0],
+  ["../img/nihao_/18.gif", 24, 0],
+  ["../img/nihao_/19.gif", 24, 0],
+  ["../img/nihao_/2.gif", 24, 0],
+  ["../img/nihao_/20.gif", 24, 0],
+  ["../img/nihao_/21.gif", 24, 0],
+  ["../img/nihao_/22.gif", 24, 0],
+  ["../img/nihao_/23.gif", 24, 0],
+  ["../img/nihao_/24.gif", 24, 0],
+  ["../img/nihao_/25.gif", 24, 0],
+  ["../img/nihao_/26.gif", 24, 0],
+  ["../img/nihao_/27.gif", 24, 0],
+  ["../img/nihao_/28.gif", 24, 0],
+  ["../img/nihao_/29.gif", 24, 0],
+  ["../img/nihao_/3.gif", 24, 0],
+  ["../img/nihao_/30.gif", 24, 0],
+  ["../img/nihao_/31.gif", 24, 0],
+  ["../img/nihao_/32.gif", 24, 0],
+  ["../img/nihao_/33.gif", 24, 0],
+  ["../img/nihao_/34.gif", 24, 0],
+  ["../img/nihao_/35.gif", 24, 0],
+  ["../img/nihao_/36.gif", 24, 0],
+  ["../img/nihao_/37.gif", 24, 0],
+  ["../img/nihao_/38.gif", 24, 0],
+  ["../img/nihao_/39.gif", 24, 0],
+  ["../img/nihao_/4.gif", 24, 0],
+  ["../img/nihao_/40.gif", 24, 0],
+  ["../img/nihao_/41.gif", 24, 0],
+  ["../img/nihao_/5.gif", 24, 0],
+  ["../img/nihao_/6.gif", 24, 0],
+  ["../img/nihao_/7.gif", 24, 0],
+  ["../img/nihao_/8.gif", 24, 0],
+  ["../img/nihao_/9.gif", 24, 0],
+  ["../img/pixeljeff/1.gif", 5, 0],
+  ["../img/pixeljeff/2.gif", 5, 0],
+  ["../img/pixeljeff/3.gif", 5, 0],
+  ["../img/pixeljeff/4.gif", 5, 0],
+  ["../img/pixeljeff/5.gif", 5, 0],
+  ["../img/waneella/8.gif", 14, 0],
+  ["../img/waneella/2.gif", 14, 0],
+  ["../img/waneella/3.gif", 14, 0],
+  ["../img/waneella/4.gif", 14, 0],
+  ["../img/waneella/5.gif", 14, 0],
+  ["../img/waneella/6.gif", 14, 0],
+  ["../img/waneella/7.gif", 14, 0],
+  ["../img/yaleiSyu/1.gif", 13, 0],
+  ["../img/yaleiSyu/2.gif", 13, 0],
+  ["../img/たかはし/1.mp4", 25, 1],
+  ["../img/たかはし/10.mp4", 25, 1],
+  ["../img/たかはし/11.mp4", 25, 1],
+  ["../img/たかはし/12.mp4", 25, 1],
+  ["../img/たかはし/13.mp4", 25, 1],
+  ["../img/たかはし/14.mp4", 25, 1],
+  ["../img/たかはし/15.mp4", 25, 1],
+  ["../img/たかはし/16.mp4", 25, 1],
+  ["../img/たかはし/17.mp4", 25, 1],
+  ["../img/たかはし/18.mp4", 25, 1],
+  ["../img/たかはし/19.mp4", 25, 1],
+  ["../img/たかはし/2.mp4", 25, 1],
+  ["../img/たかはし/20.mp4", 25, 1],
+  ["../img/たかはし/21.mp4", 25, 1],
+  ["../img/たかはし/22.mp4", 25, 1],
+  ["../img/たかはし/23.mp4", 25, 1],
+  ["../img/たかはし/24.mp4", 25, 1],
+  ["../img/たかはし/25.mp4", 25, 1],
+  ["../img/たかはし/26.mp4", 25, 1],
+  ["../img/たかはし/27.mp4", 25, 1],
+  ["../img/たかはし/28.mp4", 25, 1],
+  ["../img/たかはし/29.mp4", 25, 1],
+  ["../img/たかはし/3.mp4", 25, 1],
+  ["../img/たかはし/30.mp4", 25, 1],
+  ["../img/たかはし/4.mp4", 25, 1],
+  ["../img/たかはし/5.mp4", 25, 1],
+  ["../img/たかはし/6.mp4", 25, 1],
+  ["../img/たかはし/7.mp4", 25, 1],
+  ["../img/たかはし/8.mp4", 25, 1],
+  ["../img/たかはし/9.mp4", 25, 1],
 ];
 
 var number_of_imgs = images.length;

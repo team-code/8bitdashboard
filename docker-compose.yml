@@ -1,0 +1,8 @@
+version: '3'
+services:
+  dashboard:
+    build: .
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    container_name: 8bitdashboard

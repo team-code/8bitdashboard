@@ -3,6 +3,12 @@
   src: url("../font/minecraftfont.woff2");
 }
 
+:root {
+  --crt-red: rgb(218, 49, 49);
+  --crt-green: rgb(112, 159, 115);
+  --crt-blue: rgb(40, 129, 206);
+}
+
 * {
   font-family: minecraft;
   margin: 0;
@@ -64,7 +70,7 @@ body {
 #discord {
   text-decoration: underline;
   cursor: pointer;
-  right: 12em;
+  right: 17em;
   text-shadow: 0 0 2px #a6cece;
   color: #5865f2;
 }
@@ -79,6 +85,13 @@ body {
   font-size: 2em;
   color: white;
   text-shadow: 2px 2px 1px black;
+}
+
+#weather-widget {
+  font-size: 1.5em;
+  color: white;
+  text-shadow: 2px 2px 1px black;
+  margin-bottom: 0.5em;
 }
 
 .numinput {
@@ -105,16 +118,34 @@ body {
 
 /* Modal Content */
 .modal-content {
-  background-color: #fefefe;
   margin: auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 50%;
+  width: 95%;
+  max-width: 900px;
 }
 
 #modaltext {
   overflow: auto;
-  max-height: 75vh;
+  max-height: 85vh;
+}
+
+/* Custom scrollbar for modal */
+#modaltext::-webkit-scrollbar {
+  width: 8px;
+}
+
+#modaltext::-webkit-scrollbar-track {
+  background: #1f2937;
+  border-radius: 4px;
+}
+
+#modaltext::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+#modaltext::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
 }
 
 /* The Close Button */
@@ -480,3 +511,65 @@ Thanks to https://stackoverflow.com/questions/58159123/how-to-replay-this-css-an
     opacity: 0;
   }
 }
+
+/* Dashboard Effects Layer */
+.fx-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -5; /* Behind content, above video */
+  background: transparent;
+  display: none;
+  --fx-intensity: 0.15;
+}
+
+.fx-layer.active {
+  display: block;
+}
+
+.fx-layer:before,
+.fx-layer:after {
+  content: "";
+  display: block;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  opacity: var(--fx-intensity);
+}
+
+.fx-layer:before {
+  background: repeating-linear-gradient(
+    var(--crt-red) 0px,
+    var(--crt-green) 2px,
+    var(--crt-blue) 4px
+  );
+}
+
+.fx-layer:after {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--crt-red) 1px,
+    var(--crt-green) 2px,
+    var(--crt-blue) 3px
+  );
+}
+
+/* Optional: Curved screen edges effect */
+body.fx-enabled {
+  overflow: hidden;
+}
+
+body.fx-enabled #background,
+body.fx-enabled #background-video {
+  border-radius: 1em;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+}
+

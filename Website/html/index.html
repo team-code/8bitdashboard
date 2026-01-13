@@ -23,14 +23,37 @@
 
     <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <title>8 Bit Dashboard</title>
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#000000">
     <script src="../js/vars.js"></script>
     <script src="../js/clock.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/greetings.js"></script>
     <link href="../css/main.css" rel="stylesheet" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              minecraft: ['minecraft', 'monospace']
+            }
+          }
+        }
+      }
+    </script>
     <script src="../js/jscolor.min.js" type="module"></script>
     <script src="../js/base2048.js" type="module"></script>
+    <script src="../js/settings-modal.js"></script>
+    <script src="../js/weather.js"></script>
+    <script src="../js/search.js"></script>
+    <script src="../js/pomodoro.js"></script>
+    <script src="../js/notepad.js"></script>
+    <script src="../js/touch-gestures.js"></script>
+    <!-- Gallery Feature -->
+    <link href="../css/gallery.css" rel="stylesheet" />
+    <script src="../js/gallery.js"></script>
   </head>
   <body onload="main()">
     <div id="right_touch_target"></div>
@@ -46,20 +69,63 @@
       />
     </video>
     <section id="showcase">
+      <div id="weather-widget" style="display: none;"></div>
       <div id="clock"></div>
       <div id="greeting"></div>
+      <div id="search-container" class="mt-4" style="display: none;">
+        <form id="search-form" class="flex justify-center">
+          <input type="text" id="search-input" 
+                 class="w-64 md:w-96 px-4 py-2 bg-black/40 backdrop-blur-sm border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent font-minecraft text-center"
+                 placeholder="Search... (Press /)" 
+                 autocomplete="off">
+        </form>
+      </div>
+      <div id="pomodoro-container" class="mt-4 flex flex-col items-center gap-2" style="display: none;">
+        <span id="pomodoro-label" class="text-red-400 text-sm font-medium">🍅 Focus Time</span>
+        <span id="pomodoro-time" class="text-3xl text-white font-minecraft font-bold drop-shadow-lg">25:00</span>
+        <div class="flex gap-2">
+          <button id="pomodoro-start" class="px-3 py-1 bg-black/40 backdrop-blur-sm border border-white/30 rounded text-white text-sm hover:bg-white/20 transition-colors">▶️ Start</button>
+          <button id="pomodoro-reset" class="px-3 py-1 bg-black/40 backdrop-blur-sm border border-white/30 rounded text-white text-sm hover:bg-white/20 transition-colors">🔄 Reset</button>
+        </div>
+      </div>
+      <div id="notepad-container" class="mt-4 flex flex-col items-center" style="display: none;">
+        <button id="notepad-toggle" class="px-3 py-1 bg-black/40 backdrop-blur-sm border border-white/30 rounded text-white text-sm hover:bg-white/20 transition-colors mb-2">📝 To-Do</button>
+        <div id="notepad-panel" class="w-72 max-h-64 bg-black/50 backdrop-blur-sm border border-white/20 rounded-lg p-3 hidden" style="display: none;">
+          <div class="flex gap-2 mb-3">
+            <input type="text" id="notepad-input" 
+                   class="flex-1 px-2 py-1 bg-black/40 border border-white/30 rounded text-white text-sm placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-purple-500/50"
+                   placeholder="Add a task..."
+                   autocomplete="off">
+            <button id="notepad-add" class="px-2 py-1 bg-purple-600 hover:bg-purple-700 rounded text-white text-sm transition-colors">+</button>
+          </div>
+          <div id="notepad-list" class="space-y-2 overflow-y-auto max-h-40 pr-1"></div>
+        </div>
+      </div>
     </section>
     <a id="author" target="_blank" rel="noreferrer">author placeholder</a>
     <a id="settings">Settings</a>
     <a id="help">Help</a>
     <a id="discord" href="https://discord.gg/VHXyfncHgh">Discord</a>
 
+    <!-- Dynamic Effects Layer -->
+    <main class="fx-layer" id="fx-overlay"></main>
+
     <!-- The Modal -->
     <div class="modal" id="myModal">
       <!-- Modal content -->
-      <div class="modal-content container" id="modaltext">
+      <div class="modal-content" id="modaltext">
         <span class="close">&times;</span>
       </div>
     </div>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('../sw.js')
+            .then(registration => console.log('SW registered: ', registration))
+            .catch(registrationError => console.log('SW registration failed: ', registrationError));
+        });
+      }
+    </script>
   </body>
 </html>

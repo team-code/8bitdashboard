@@ -1,11 +1,19 @@
-//Main function being called,
+
+// Preloading state
+let next_random_index = -1;
 
 function main() {
   setUpModal();
+  setupUserSettings(); // Must be before setRandomImage - custom background check needs user_settings
   setRandomImage();
-  setupUserSettings();
   getSetTime();
   setGreeting();
+  initWeather(); // Initialize weather widget
+  initSearchBar(); // Initialize search bar
+  initPomodoro(); // Initialize pomodoro timer
+  initNotepad(); // Initialize notepad
+  initTouchGestures(); // Initialize enhanced touch gestures
+  updateCRTEffect(); // Apply CRT effect if enabled
   time = setInterval(getSetTime, 5000);
   setInterval(timeToChangeGreeting, 5000, true);
   shortcuts();
@@ -444,18 +452,82 @@ function copyURL() {
 }
 
 //Inserts the info to the help model
+//Inserts the info to the help model
 function helpModelContent() {
-  document.getElementById("modaltext").innerHTML =
-    "<p class='space12'> By <a href='https://github.com/arces' target='_blank'>Dan Janes</a>  ( with some help from <a href='https://github.com/taeganwarren' target='_blank'> Taegan Warren</a> )</p>" +
-    "<br class='wholeline'><p class='space12'>Inspired by 8bitdash.com When the site stopped working a year or so back, we decided to make our own. After a long break we are back and active.</p>" +
-    "<br class='wholeline'><p class='space12'>No Ads!  No Tracking!  Just 8 bit backgrounds!     (Unlike 8bitdash.com ;P Sorry not sorry)</p>" +
-    "<br class='wholeline'><p class='space12'>App Version: " +
-    app_version_num +
-    "</p>" +
-    "<br class='wholeline'><p class='space12'>Save Version: " +
-    app_save_version +
-    "</p>" +
-    "<br class='wholeline'><br class='wholeline'> <p class='space12'>Want to get in contact? <a href='mailto:contact@8bitdashboard.com'>Have a new feature suggestion or want your art on here?</a> </p>";
+  document.getElementById("modaltext").innerHTML = `
+    <div class="bg-gray-900 text-gray-100 p-6 rounded-2xl w-full max-w-5xl mx-auto shadow-2xl border border-gray-700 font-minecraft max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-700">
+        <h2 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">ℹ️ About & Help</h2>
+        <button class="close text-3xl text-gray-400 hover:text-white transition-colors leading-none" onclick="closemodel()">&times;</button>
+      </div>
+
+      <div class="space-y-6">
+        <!-- About Section -->
+        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+           <h3 class="text-xl font-semibold mb-2 text-purple-400">About</h3>
+            <p class="mb-2">By <a href='https://github.com/arces' target='_blank' class="text-blue-400 hover:underline">Dan Janes</a></p>
+            <p class="mb-2 text-gray-400 text-sm">Inspired by 8bitdash.com. When the site stopped working for many years, I decided to make my own in 2020. After a long break we are back and active.</p>
+            <p class="mb-2 font-bold text-green-400">No Ads! No Tracking! Just 8 bit backgrounds! <span class="text-gray-500 font-normal text-xs">(Unlike 8bitdash.com Sorry not sorry)</span></p>
+            <div class="flex gap-4 text-sm text-gray-500 mt-2">
+                <span>App Version: ${app_version_num}</span>
+                <span>Save Version: ${app_save_version}</span>
+            </div>
+        </div>
+
+        <!-- How to Use -->
+        <div class="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-pink-400">How to Use</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-300">
+                <li><strong>Navigation:</strong> Use <kbd class="bg-gray-700 px-2 py-1 rounded text-xs border border-gray-600">Left</kbd> / <kbd class="bg-gray-700 px-2 py-1 rounded text-xs border border-gray-600">Right</kbd> arrows to change backgrounds.</li>
+                <li><strong>Randomize:</strong> Press <kbd class="bg-gray-700 px-2 py-1 rounded text-xs border border-gray-600">\`</kbd> (backtick) for a random background.</li>
+                <li><strong>Shortcuts:</strong> Press keys like <kbd class="bg-gray-700 px-2 py-1 rounded text-xs border border-gray-600">g</kbd> (Github), <kbd class="bg-gray-700 px-2 py-1 rounded text-xs border border-gray-600">r</kbd> (Reddit), etc. Customize them in Settings!</li>
+                <li><strong>Search:</strong> Press <kbd class="bg-gray-700 px-2 py-1 rounded text-xs border border-gray-600">/</kbd> to focus the search bar.</li>
+                 <li><strong>Gallery:</strong> Click the folder icon on the left to browse/search all art.</li>
+            </ul>
+        </div>
+
+        <!-- Features -->
+        <div>
+            <h3 class="text-xl font-semibold mb-3 text-blue-400">Features</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div class="p-3 bg-gray-800 rounded border border-gray-700">
+                    <div class="font-bold mb-1">🖼️ Massive Gallery</div>
+                    <div class="text-sm text-gray-400">Hundreds of 8-bit gifs and images. Create custom playlists!</div>
+                 </div>
+                 <div class="p-3 bg-gray-800 rounded border border-gray-700">
+                    <div class="font-bold mb-1">📝 To-Do List</div>
+                    <div class="text-sm text-gray-400">Simple, local notepad to keep track of tasks.</div>
+                 </div>
+                 <div class="p-3 bg-gray-800 rounded border border-gray-700">
+                    <div class="font-bold mb-1">🍅 Pomodoro Timer</div>
+                    <div class="text-sm text-gray-400">Stay focused with a built-in work/break timer.</div>
+                 </div>
+                 <div class="p-3 bg-gray-800 rounded border border-gray-700">
+                    <div class="font-bold mb-1">📺 CRT Effects</div>
+                    <div class="text-sm text-gray-400">Retro scanlines and distortion effects for immersion.</div>
+                 </div>
+                 <div class="p-3 bg-gray-800 rounded border border-gray-700">
+                    <div class="font-bold mb-1">🌤️ Local Weather</div>
+                    <div class="text-sm text-gray-400">Privacy-focused weather updates for your location.</div>
+                 </div>
+            </div>
+        </div>
+        
+         <div class="text-center pt-4 border-t border-gray-700">
+            <a href='mailto:contact@8bitdashboard.com' class="text-purple-400 hover:text-purple-300 underline font-semibold">Get in Contact / Feature Suggestions / Submit Art</a>
+        </div>
+
+      </div>
+    </div>
+  `;
+  
+  // Re-attach close button listener since we replaced the innerHTML
+  const closeBtn = document.querySelector('#modaltext .close');
+  if (closeBtn) {
+      closeBtn.onclick = () => {
+        closemodel();
+      };
+  }
 }
 
 //Saves the users settings and applies them
@@ -467,6 +539,8 @@ function saveBTN() {
   user_settings.text_shadows = document.getElementById(
     "textshadowscheckmark"
   ).checked;
+  user_settings.crt_effect = document.getElementById("fx-toggle").checked;
+  user_settings.crt_opacity = parseInt(document.getElementById("fx-intensity").value);
   user_settings.random_seek = document.getElementById(
     "randomimagecheckmark"
   ).checked;
@@ -505,6 +579,26 @@ function saveBTN() {
   ).checked;
   user_settings.staticbackgroundid =
     document.getElementById("startupimageinput").value;
+  user_settings.custom_background_url =
+    document.getElementById("custombackgroundurl").value.trim();
+
+  // Weather settings
+  user_settings.show_weather = document.getElementById("weathercheckmark").checked;
+  user_settings.weather_fahrenheit = document.getElementById("weatherfahrenheitcheckmark").checked;
+
+  // Search settings
+  user_settings.show_search = document.getElementById("searchcheckmark").checked;
+  user_settings.search_engine = document.getElementById("searchengine").value;
+
+  // Pomodoro settings
+  user_settings.show_pomodoro = document.getElementById("pomodorocheckmark").checked;
+  user_settings.pomodoro_work_time = parseInt(document.getElementById("pomodoroWork").value) || 25;
+  user_settings.pomodoro_break_time = parseInt(document.getElementById("pomodoroBreak").value) || 5;
+  user_settings.pomodoro_long_break_time = parseInt(document.getElementById("pomodoroLongBreak").value) || 15;
+  user_settings.pomodoro_sound = document.getElementById("pomodorosoundcheckmark").checked;
+
+  // Notepad settings
+  user_settings.show_notepad = document.getElementById("notepadcheckmark").checked;
 
   let shortcut_urls = document.getElementsByClassName("shortcutvalue");
   let shortcut_keys = document.getElementsByClassName("shortcutkey");
@@ -520,7 +614,39 @@ function saveBTN() {
 
   saveUserSettings();
   applyUserSettings();
+  refreshWeather(); // Refresh weather with new settings (clears cache first)
+  updateSearchVisibility(); // Update search bar visibility
+  updatePomodoroVisibility(); // Update pomodoro visibility
+  if (typeof refreshPomodoroSettings === 'function') {
+    refreshPomodoroSettings(); // Update pomodoro durations
+  }
+  updateNotepadVisibility(); // Update notepad visibility
+  updateCRTEffect(); // Update CRT scanline effect
+  setRandomImage(); // Apply custom background if set
   closemodel();
+}
+
+/**
+ * Update CRT scanline effect visibility based on settings
+ */
+function updateCRTEffect() {
+  const crtOverlay = document.getElementById('fx-overlay');
+  if (!crtOverlay) return;
+  
+  if (user_settings.crt_effect) {
+    crtOverlay.classList.add('active');
+    document.body.classList.add('fx-enabled');
+    
+    // Apply opacity: map 0-100 to 0-0.5
+    const maxOpacity = 0.5;
+    const opacityPercentage = (user_settings.crt_opacity !== undefined ? user_settings.crt_opacity : 100) / 100;
+    const finalOpacity = maxOpacity * opacityPercentage;
+    
+    crtOverlay.style.setProperty('--fx-intensity', finalOpacity);
+  } else {
+    crtOverlay.classList.remove('active');
+    document.body.classList.remove('fx-enabled');
+  }
 }
 
 //Applies the users settings
@@ -703,7 +829,7 @@ function setUpModal() {
   // When the user clicks the button, open the modal
   document.getElementById("settings").onclick = function () {
     modal.style.display = "block";
-    settingsModelContent();
+    renderNewSettingsModal();
     modal_active = true;
   };
 
@@ -729,13 +855,57 @@ function setUpModal() {
 
 //Returns a random Image url
 function getRandomImage() {
+  if (active_playlist && active_playlist.length > 0) {
+      const randIdx = Math.floor(Math.random() * active_playlist.length);
+      active_playlist_index = randIdx;
+      return active_playlist[randIdx];
+  }
   img_number = Math.floor(Math.random() * images.length);
   return img_number;
 }
 
 //Sets a random Image url
+//Sets a random Image url
 function setRandomImage() {
-  setImageNum(getRandomImage());
+  // Check if custom background URL is set
+  if (user_settings.custom_background_url && user_settings.custom_background_url.trim() !== '') {
+    applyCustomBackground(user_settings.custom_background_url);
+    return;
+  }
+  
+  let index;
+  // Use pre-selected random index if available
+  if (next_random_index !== -1) {
+    index = next_random_index;
+  } else {
+    index = getRandomImage();
+  }
+  
+  setImageNum(index);
+  
+  // Prepare next random image for preloading
+  next_random_index = getRandomImage();
+  preloadAsset(images[next_random_index]);
+}
+
+/**
+ * Apply a custom background URL
+ * @param {string} url - The URL of the background image
+ */
+function applyCustomBackground(url) {
+  const background_element = document.getElementById("background");
+  const background_video_element = document.getElementById("background-video");
+  
+  // Set the background image
+  background_element.style.backgroundImage = `url('${url}')`;
+  
+  // Show the background element, hide video
+  background_element.style.display = "";
+  background_video_element.style.display = "None";
+  
+  // Hide artist attribution for custom backgrounds
+  document.getElementById("author").innerHTML = "";
+  document.getElementById("author").href = "";
 }
 
 //Sets Image based off a given number
@@ -777,6 +947,37 @@ function setImageNum(Num) {
     if (tmp) {
         tmp.innerText = img_number;
     }
+    
+    // Preload next sequential image if not in random mode
+    if (!user_settings.random_seek) {
+      let nextNum = Num + 1;
+      if (nextNum >= images.length) nextNum = 0;
+      preloadAsset(images[nextNum]);
+    }
+  }
+}
+
+/**
+ * Preload an asset (image or video)
+ * @param {Array} image_details - [url, artist_index, type]
+ */
+function preloadAsset(image_details) {
+  if (!image_details) return;
+  
+  const url = image_details[0];
+  const type = image_details[2];
+  
+  if (type === 0) {
+    // Image/WEBP/GIF
+    const img = new Image();
+    img.src = url;
+  } else {
+    // Video (MP4)
+    // Create a hidden video element to trigger buffering
+    const vid = document.createElement('video');
+    vid.preload = 'auto';
+    vid.src = url;
+    // We don't append it to DOM, just creating it triggers preload in most browsers
   }
 }
 
@@ -789,31 +990,46 @@ function updateArtistAttr(imageObj) {
 
 //Goes to the next image in the arr
 function nextImage() {
-  img_number++;
-  if (img_number >= images.length) {
-    img_number = 0;
+  if (active_playlist && active_playlist.length > 0) {
+      active_playlist_index++;
+      if (active_playlist_index >= active_playlist.length) {
+          active_playlist_index = 0;
+      }
+      img_number = active_playlist[active_playlist_index];
+  } else {
+      img_number++;
+      if (img_number >= images.length) {
+        img_number = 0;
+      }
   }
   setImageNum(img_number);
 }
 
 //Goes
 function previousImage() {
-  img_number--;
-  if (img_number < 0) {
-    img_number = number_of_imgs - 1;
+  if (active_playlist && active_playlist.length > 0) {
+      active_playlist_index--;
+      if (active_playlist_index < 0) {
+          active_playlist_index = active_playlist.length - 1;
+      }
+      img_number = active_playlist[active_playlist_index];
+  } else {
+      img_number--;
+      if (img_number < 0) {
+        img_number = number_of_imgs - 1;
+      }
   }
   setImageNum(img_number);
 }
 
 //Updates the collapsibles with their click functionality
 function updateCollapsible() {
-  var coll = document.getElementsByClassName("collapsible");
-  var i;
+  const coll = document.getElementsByClassName("collapsible");
 
-  for (i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function () {
+  for (const item of coll) {
+    item.addEventListener("click", function () {
       this.classList.toggle("active");
-      var content = this.nextElementSibling;
+      const content = this.nextElementSibling;
       if (content.style.display === "grid") {
         content.style.display = "none";
       } else {
@@ -827,6 +1043,8 @@ function updateCollapsible() {
 function closemodel() {
   modal.style.display = "none";
   modal_active = false;
+  // Revert background filters to saved settings in case the user played around but didn't save
+  backgroundfilters(true);
 }
 
 //Opens a link!
@@ -876,6 +1094,12 @@ function shortcuts() {
     });
 
   document.addEventListener("keydown", function (event) {
+    // Skip shortcuts when typing in input fields (search bar, settings inputs, etc.)
+    const activeTag = document.activeElement.tagName;
+    if (activeTag === 'INPUT' || activeTag === 'TEXTAREA') {
+      return;
+    }
+    
     //console.log(event.key); //Debug
     if (event.key === "`") {
       setRandomImage();
@@ -956,7 +1180,7 @@ function newUserSettings(returnstring = false) {
     name,
     value,
   }));
-  let tmp_user_settings = new user_settings_obj(shortcut_arr);
+  let tmp_user_settings = new UserSettings(shortcut_arr);
 
   if (returnstring) {
     return JSON.stringify(tmp_user_settings);
@@ -1122,6 +1346,31 @@ function upgradeUserSettings(version, user_settings) {
     user_settings.staticbackground = false;
     user_settings.staticbackgroundid = 1;
     user_settings.version = 1.2;
+  } else if (version == 1.2) {
+    // Upgrade to 1.3
+    // Weather settings
+    user_settings.show_weather = false;
+    user_settings.weather_fahrenheit = false;
+    user_settings.weather_lat = null;
+    user_settings.weather_lon = null;
+    // Search settings
+    user_settings.show_search = true;
+    user_settings.search_engine = 'duckduckgo';
+    // Pomodoro settings
+    user_settings.show_pomodoro = true;
+    user_settings.pomodoro_work_time = 25;
+    user_settings.pomodoro_break_time = 5;
+    user_settings.pomodoro_long_break_time = 15;
+    user_settings.pomodoro_sound = true;
+    // Notepad settings
+    user_settings.show_notepad = false;
+    // Custom background URL
+    user_settings.custom_background_url = '';
+    // CRT effect setting
+    user_settings.crt_effect = false;
+    user_settings.crt_opacity = 100;
+    
+    user_settings.version = 1.3;
   }
   return user_settings;
 }
@@ -1218,7 +1467,7 @@ function decodeUserSettings(encodedSettings, returnObj = true) {
       //If the link is the old 1.1 save version
       if (tmp_user_settings[1] == 1.1) {
         //Create a new object and return it
-        return new user_settings_obj(
+        return new UserSettings(
           tmp_user_settings[0],
           tmp_user_settings[1],
           tmp_user_settings[2],
@@ -1237,7 +1486,7 @@ function decodeUserSettings(encodedSettings, returnObj = true) {
         //More up to date 1.2 save version
 
         //Create a new object and return it
-        return new user_settings_obj(
+        return new UserSettings(
           tmp_user_settings[0],
           tmp_user_settings[1],
           tmp_user_settings[2],

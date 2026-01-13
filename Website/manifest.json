@@ -1,0 +1,17 @@
+{
+  "name": "8 Bit Dashboard",
+  "short_name": "8BitDash",
+  "description": "The perfect dashboard. 8-bit gifs with a clock, bookmark hotkeys, and a greeting.",
+  "start_url": "/html/index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/html/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
