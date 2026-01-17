@@ -6,6 +6,7 @@ class GallerySystem {
         this.selectedArtist = 'all';
         this.searchQuery = '';
         this.showHeartsOnly = false; // Initialize state
+        this.sidebarOpen = false;
         this.playlists = this.loadPlaylists();
         this.hearts = this.loadHearts();
         
@@ -68,9 +69,16 @@ class GallerySystem {
                     <input type="file" id="playlist-import-input" accept=".json" style="display:none">
 
                 </div>
+
+                <div id="gallery-sidebar-scrim"></div>
                 
                 <div id="gallery-content">
                     <div id="gallery-toolbar">
+                        <button id="gallery-sidebar-toggle" type="button" aria-label="Toggle playlists">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
                         <div id="gallery-filters" class="flex gap-2 items-center flex-grow">
                              <!-- Filters injected here based on mode -->
                         </div>
@@ -99,27 +107,40 @@ class GallerySystem {
         document.body.insertAdjacentHTML('beforeend', modalHTML);
 
         // Add Gallery Button to footer if not exists
-        const footer = document.querySelector('#settings').parentNode; // Assuming relative to settings
-        if(footer && !document.getElementById('gallery-opener')) {
+        const nav = document.getElementById('utility-nav');
+        if (!document.getElementById('gallery-opener')) {
              const settingsBtn = document.getElementById('settings');
              const galleryBtn = document.createElement('a');
              galleryBtn.id = 'gallery-opener';
              galleryBtn.innerText = 'Gallery';
-             galleryBtn.style.right = '11em'; // Positioned between Settings (5em) and Discord (17em)
-             galleryBtn.style.position = 'fixed';
-             galleryBtn.style.bottom = '1em';
-             galleryBtn.style.color = 'white';
-             galleryBtn.style.textDecoration = 'underline';
-             galleryBtn.style.cursor = 'pointer';
-             galleryBtn.style.fontSize = '1.5em';
-             
-             document.body.appendChild(galleryBtn);
+
+             if (nav && settingsBtn) {
+                 nav.insertBefore(galleryBtn, settingsBtn);
+             } else if (nav) {
+                 nav.appendChild(galleryBtn);
+             } else if (settingsBtn && settingsBtn.parentNode) {
+                 settingsBtn.parentNode.insertBefore(galleryBtn, settingsBtn);
+             } else {
+                 document.body.appendChild(galleryBtn);
+             }
         }
     }
 
     attachEventListeners() {
-        document.getElementById('gallery-opener').addEventListener('click', () => this.open());
+        const opener = document.getElementById('gallery-opener');
+        if (opener) {
+            opener.addEventListener('click', () => this.open());
+        }
         document.getElementById('gallery-close').addEventListener('click', () => this.close());
+
+        const sidebarToggle = document.getElementById('gallery-sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => this.toggleSidebar());
+        }
+        const sidebarScrim = document.getElementById('gallery-sidebar-scrim');
+        if (sidebarScrim) {
+            sidebarScrim.addEventListener('click', () => this.closeSidebar());
+        }
         
         // Navigation
         document.getElementById('gallery-sidebar').addEventListener('click', (e) => {
@@ -171,12 +192,35 @@ class GallerySystem {
         });
     }
 
+    toggleSidebar() {
+        if (this.sidebarOpen) {
+            this.closeSidebar();
+        } else {
+            this.openSidebar();
+        }
+    }
+
+    openSidebar() {
+        const modal = document.getElementById('gallery-modal');
+        if (!modal) return;
+        modal.classList.add('sidebar-open');
+        this.sidebarOpen = true;
+    }
+
+    closeSidebar() {
+        const modal = document.getElementById('gallery-modal');
+        if (!modal) return;
+        modal.classList.remove('sidebar-open');
+        this.sidebarOpen = false;
+    }
+
     open() {
         const modal = document.getElementById('gallery-modal');
         if (!modal) return;
         
         modal.classList.add('active');
         this.isOpen = true;
+        this.closeSidebar();
         
         // Use requestAnimationFrame to ensure modal is painting before we render grid
         requestAnimationFrame(() => {
@@ -188,6 +232,7 @@ class GallerySystem {
     close() {
         document.getElementById('gallery-modal').classList.remove('active');
         this.isOpen = false;
+        this.closeSidebar();
         // Optional: clear gallery to free memory/stop videos if needed, 
         // but keeping it might be better for re-open speed. 
         // For now, let's leave it, but we definitely don't want to init it on load.
@@ -208,6 +253,7 @@ class GallerySystem {
         
         this.renderToolbar();
         this.renderGallery();
+        this.closeSidebar();
     }
 
     renderSidebar() {

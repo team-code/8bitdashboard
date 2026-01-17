@@ -20,6 +20,41 @@
     pointer-events: auto;
 }
 
+#gallery-sidebar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 42px;
+    height: 34px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    cursor: pointer;
+    gap: 3px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1004;
+}
+
+#gallery-sidebar-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #cfcfcf;
+}
+
+#gallery-sidebar-scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    display: none;
+    z-index: 1001;
+}
+
 /* Sidebar */
 #gallery-sidebar {
     width: 250px;
@@ -58,6 +93,8 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 
 /* Header / Toolbar */
@@ -191,7 +228,7 @@
     right: 20px;
     font-size: 2rem;
     cursor: pointer;
-    z-index: 1001;
+    z-index: 1003;
     color: #888;
 }
 
@@ -212,4 +249,74 @@
 }
 #gallery-grid::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+@media only screen and (max-width: 900px) {
+    #gallery-grid {
+        max-width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #gallery-modal {
+        overflow: hidden;
+    }
+
+    #gallery-sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: min(85vw, 320px);
+        transform: translateX(-110%);
+        transition: transform 0.3s ease;
+        z-index: 1002;
+        box-shadow: 8px 0 24px rgba(0, 0, 0, 0.5);
+    }
+
+    #gallery-modal.sidebar-open #gallery-sidebar {
+        transform: translateX(0);
+    }
+
+    #gallery-sidebar-toggle {
+        display: inline-flex;
+    }
+
+    #gallery-sidebar-scrim {
+        display: block;
+    }
+
+    #gallery-modal.sidebar-open #gallery-sidebar-scrim {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    #gallery-toolbar {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    #gallery-filters {
+        flex: 1 1 100%;
+        flex-wrap: wrap;
+    }
+
+    #gallery-toolbar select,
+    #gallery-toolbar input {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    #gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        max-width: 100%;
+        padding: 0.75rem;
+        gap: 1rem;
+    }
+
+    #gallery-pagination {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
 }
