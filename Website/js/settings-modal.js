@@ -295,20 +295,38 @@ function buildGreetingSection() {
 }
 
 /**
- * Builds the background settings section
+ * Builds playlist options for dropdown
  * @returns {string} HTML string
  */
 function buildPlaylistOptions() {
   if (typeof gallerySystem === 'undefined' || !gallerySystem.playlists) return '<option value="">No Playlists Found</option>';
   if (gallerySystem.playlists.length === 0) return '<option value="">No Playlists Created</option>';
-  
-  return gallerySystem.playlists.map((pl, index) => 
+
+  return gallerySystem.playlists.map((pl, index) =>
     `<option value="${index}">${escapeHtml(pl.name)} (${pl.items.length})</option>`
   ).join('');
 }
 
+/**
+ * Builds artist options for dropdown
+ * @returns {string} HTML string
+ */
+function buildArtistOptions() {
+  if (typeof artists === 'undefined' || !artists || artists.length === 0) return '<option value="">No Artists Found</option>';
+
+  return artists.map((artist, index) =>
+    `<option value="${index}">${escapeHtml(artist[0])}</option>`
+  ).join('');
+}
+
+/**
+ * Builds the background settings section
+ * @returns {string} HTML string
+ */
+
 function buildBackgroundSection() {
   const playlistOptions = buildPlaylistOptions();
+  const artistOptions = buildArtistOptions();
 
   return `
     <details class="group">
@@ -360,6 +378,26 @@ function buildBackgroundSection() {
           <label for="startupplaylistselect" class="text-gray-300">Select Playlist</label>
           <select id="startupplaylistselect" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:ring-2 focus:ring-purple-500">
             ${playlistOptions}
+          </select>
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="text-gray-300">Use Favorites as Playlist</label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="favoritesplaylistcheckmark" class="sr-only peer">
+            <div class="w-14 h-8 bg-gray-600 peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer peer-checked:after:translate-x-6 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500"></div>
+          </label>
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="text-gray-300">Use Artist as Playlist</label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="artistplaylistcheckmark" class="sr-only peer">
+            <div class="w-14 h-8 bg-gray-600 peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer peer-checked:after:translate-x-6 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500"></div>
+          </label>
+        </div>
+        <div id="artist-playlist-row" class="flex items-center justify-between" style="display:none;">
+          <label for="artistplaylistselect" class="text-gray-300">Select Artist</label>
+          <select id="artistplaylistselect" class="px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:ring-2 focus:ring-purple-500">
+            ${artistOptions}
           </select>
         </div>
         <div class="flex items-center justify-between">
@@ -674,7 +712,21 @@ function populateSettingsValues() {
   if (user_settings.staticplaylistindex !== undefined) {
     document.getElementById('startupplaylistselect').value = user_settings.staticplaylistindex;
   }
-  
+
+  // Favorites as playlist
+  if (user_settings.useFavoritesAsPlaylist) {
+    document.getElementById('favoritesplaylistcheckmark').checked = true;
+  }
+
+  // Artist as playlist
+  if (user_settings.useArtistAsPlaylist) {
+    document.getElementById('artistplaylistcheckmark').checked = true;
+    document.getElementById('artist-playlist-row').style.display = 'flex';
+  }
+  if (user_settings.artistPlaylistIndex !== undefined) {
+    document.getElementById('artistplaylistselect').value = user_settings.artistPlaylistIndex;
+  }
+
   document.getElementById('current_image_number').textContent = img_number;
   document.getElementById('custombackgroundurl').value = user_settings.custom_background_url || '';
 
@@ -736,16 +788,50 @@ function setupSettingsListeners() {
       const row = document.getElementById('startup-playlist-row');
       if (row) row.style.display = e.target.checked ? 'flex' : 'none';
       if (e.target.checked) {
-         // Auto-uncheck fixed static background if playlist is selected to avoid confusion
+         // Auto-uncheck other background/playlist options
          const staticBgCheck = document.getElementById('startupbackgroundcheckmark');
          if(staticBgCheck && staticBgCheck.checked) staticBgCheck.click();
+         const favCheck = document.getElementById('favoritesplaylistcheckmark');
+         if(favCheck && favCheck.checked) favCheck.click();
+         const artistCheck = document.getElementById('artistplaylistcheckmark');
+         if(artistCheck && artistCheck.checked) artistCheck.click();
       }
     }
     if (e.target.id === 'startupbackgroundcheckmark') {
       if (e.target.checked) {
-         // Auto-uncheck playlist if static background is selected
+         // Auto-uncheck other playlist options if static background is selected
          const playlistCheck = document.getElementById('startupplaylistcheckmark');
          if(playlistCheck && playlistCheck.checked) playlistCheck.click();
+         const favCheck = document.getElementById('favoritesplaylistcheckmark');
+         if(favCheck && favCheck.checked) favCheck.click();
+         const artistCheck = document.getElementById('artistplaylistcheckmark');
+         if(artistCheck && artistCheck.checked) artistCheck.click();
+      }
+    }
+    // Favorites as playlist checkbox
+    if (e.target.id === 'favoritesplaylistcheckmark') {
+      if (e.target.checked) {
+        // Auto-uncheck other playlist/background options
+        const staticBgCheck = document.getElementById('startupbackgroundcheckmark');
+        if(staticBgCheck && staticBgCheck.checked) staticBgCheck.click();
+        const playlistCheck = document.getElementById('startupplaylistcheckmark');
+        if(playlistCheck && playlistCheck.checked) playlistCheck.click();
+        const artistCheck = document.getElementById('artistplaylistcheckmark');
+        if(artistCheck && artistCheck.checked) artistCheck.click();
+      }
+    }
+    // Artist as playlist checkbox
+    if (e.target.id === 'artistplaylistcheckmark') {
+      const row = document.getElementById('artist-playlist-row');
+      if (row) row.style.display = e.target.checked ? 'flex' : 'none';
+      if (e.target.checked) {
+        // Auto-uncheck other playlist/background options
+        const staticBgCheck = document.getElementById('startupbackgroundcheckmark');
+        if(staticBgCheck && staticBgCheck.checked) staticBgCheck.click();
+        const playlistCheck = document.getElementById('startupplaylistcheckmark');
+        if(playlistCheck && playlistCheck.checked) playlistCheck.click();
+        const favCheck = document.getElementById('favoritesplaylistcheckmark');
+        if(favCheck && favCheck.checked) favCheck.click();
       }
     }
   });

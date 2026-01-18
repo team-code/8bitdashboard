@@ -584,6 +584,17 @@ function saveBTN() {
   user_settings.staticplaylistindex = document.getElementById(
       "startupplaylistselect"
     ).value;
+
+  // Favorites as playlist
+  const favPlaylistCheckbox = document.getElementById("favoritesplaylistcheckmark");
+  user_settings.useFavoritesAsPlaylist = favPlaylistCheckbox ? favPlaylistCheckbox.checked : false;
+
+  // Artist as playlist
+  const artistPlaylistCheckbox = document.getElementById("artistplaylistcheckmark");
+  user_settings.useArtistAsPlaylist = artistPlaylistCheckbox ? artistPlaylistCheckbox.checked : false;
+  const artistSelect = document.getElementById("artistplaylistselect");
+  user_settings.artistPlaylistIndex = artistSelect ? parseInt(artistSelect.value) : 0;
+
   user_settings.custom_background_url =
     document.getElementById("custombackgroundurl").value.trim();
 
@@ -642,7 +653,7 @@ function saveBTN() {
   }
   updateNotepadVisibility(); // Update notepad visibility
   updateCRTEffect(); // Update CRT scanline effect
-  setRandomImage(); // Apply custom background if set
+  applyBackgroundAfterSave(); // Apply appropriate background based on settings
   closemodel();
 }
 
@@ -652,21 +663,99 @@ function saveBTN() {
 function updateCRTEffect() {
   const crtOverlay = document.getElementById('fx-overlay');
   if (!crtOverlay) return;
-  
+
   if (user_settings.crt_effect) {
     crtOverlay.classList.add('active');
     document.body.classList.add('fx-enabled');
-    
+
     // Apply opacity: map 0-100 to 0-0.5
     const maxOpacity = 0.5;
     const opacityPercentage = (user_settings.crt_opacity !== undefined ? user_settings.crt_opacity : 100) / 100;
     const finalOpacity = maxOpacity * opacityPercentage;
-    
+
     crtOverlay.style.setProperty('--fx-intensity', finalOpacity);
   } else {
     crtOverlay.classList.remove('active');
     document.body.classList.remove('fx-enabled');
   }
+}
+
+/**
+ * Get array of image indices for a specific artist
+ * @param {number} artistIndex - The index of the artist in the artists array
+ * @returns {Array} Array of image indices belonging to that artist
+ */
+function getImagesByArtist(artistIndex) {
+  const artistImages = [];
+  for (let i = 0; i < images.length; i++) {
+    if (images[i][1] === artistIndex) {
+      artistImages.push(i);
+    }
+  }
+  return artistImages;
+}
+
+/**
+ * Apply the appropriate background after saving settings
+ * Priority: custom URL > favorites playlist > artist playlist > static playlist > static background > no change
+ */
+function applyBackgroundAfterSave() {
+  // 1. Custom background URL takes highest priority
+  if (user_settings.custom_background_url && user_settings.custom_background_url.trim() !== '') {
+    applyCustomBackground(user_settings.custom_background_url);
+    return;
+  }
+
+  // 2. Favorites as playlist
+  if (user_settings.useFavoritesAsPlaylist) {
+    if (typeof gallerySystem !== 'undefined' && gallerySystem.hearts && gallerySystem.hearts.length > 0) {
+      active_playlist = gallerySystem.hearts.slice(); // Copy the hearts/favorites array
+      active_playlist_index = Math.floor(Math.random() * active_playlist.length);
+      next_random_index = -1;
+      setImageNum(active_playlist[active_playlist_index]);
+      return;
+    }
+  }
+
+  // 3. Artist as playlist
+  if (user_settings.useArtistAsPlaylist) {
+    const artistImages = getImagesByArtist(parseInt(user_settings.artistPlaylistIndex));
+    if (artistImages.length > 0) {
+      active_playlist = artistImages;
+      active_playlist_index = Math.floor(Math.random() * active_playlist.length);
+      next_random_index = -1;
+      setImageNum(active_playlist[active_playlist_index]);
+      return;
+    }
+  }
+
+  // 4. Static playlist
+  if (user_settings.staticplaylist) {
+    if (typeof gallerySystem !== 'undefined' && gallerySystem.playlists) {
+      const plIndex = parseInt(user_settings.staticplaylistindex);
+      if (gallerySystem.playlists[plIndex]) {
+        const items = gallerySystem.playlists[plIndex].items;
+        if (items && items.length > 0) {
+          active_playlist = items;
+          active_playlist_index = Math.floor(Math.random() * items.length);
+          next_random_index = -1;
+          setImageNum(items[active_playlist_index]);
+          return;
+        }
+      }
+    }
+  }
+
+  // 5. Static background (fixed image)
+  if (user_settings.staticbackground) {
+    active_playlist = null;
+    next_random_index = -1;
+    setImageNum(parseInt(user_settings.staticbackgroundid));
+    return;
+  }
+
+  // 6. None of the above - DON'T change the background (key fix for save bug)
+  // User has no specific background setting, so keep whatever is currently displayed
 }
 
 //Applies the users settings
@@ -1436,8 +1525,17 @@ function upgradeUserSettings(version, user_settings) {
     // Playlist startup settings
     user_settings.staticplaylist = false;
     user_settings.staticplaylistindex = 0;
-    
+
     user_settings.version = 1.4;
+  } else if (version == 1.4) {
+    // Upgrade to 1.5
+    // Favorites as playlist
+    user_settings.useFavoritesAsPlaylist = false;
+    // Artist as playlist
+    user_settings.useArtistAsPlaylist = false;
+    user_settings.artistPlaylistIndex = 0;
+
+    user_settings.version = 1.5;
   }
   return user_settings;
 }
