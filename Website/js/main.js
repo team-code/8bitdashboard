@@ -543,6 +543,7 @@ function saveBTN() {
   user_settings.random_seek = document.getElementById(
     "randomimagecheckmark"
   ).checked;
+  user_settings.mouseClickNavigation = document.getElementById("mouseclicknavcheckmark").checked;
   user_settings.clock_color = document.getElementById("clockcolor").value;
   user_settings.greeting_color = document.getElementById("greetingcolor").value;
   user_settings.clock24hr = document.getElementById("24hrcheckmark").checked;
@@ -1242,6 +1243,18 @@ function shortcuts() {
       }
     });
 
+  // Mouse click navigation (for devices like Raspberry Pi touchscreens)
+  document.getElementById("right_touch_target")
+    .addEventListener("click", function (event) {
+      if (!user_settings.mouseClickNavigation || modal_active) return;
+      if (user_settings.random_seek) { setRandomImage(); } else { nextImage(); }
+    });
+  document.getElementById("left_touch_target")
+    .addEventListener("click", function (event) {
+      if (!user_settings.mouseClickNavigation || modal_active) return;
+      if (user_settings.random_seek) { setRandomImage(); } else { previousImage(); }
+    });
+
   document.addEventListener("keydown", function (event) {
     // Skip shortcuts when typing in input fields (search bar, settings inputs, etc.)
     const activeTag = document.activeElement.tagName;
@@ -1536,6 +1549,11 @@ function upgradeUserSettings(version, user_settings) {
     user_settings.artistPlaylistIndex = 0;
 
     user_settings.version = 1.5;
+  } else if (version == 1.5) {
+    // Upgrade to 1.6
+    user_settings.mouseClickNavigation = false;
+
+    user_settings.version = 1.6;
   }
   return user_settings;
 }

@@ -345,6 +345,14 @@ function buildBackgroundSection() {
           </label>
         </div>
         <div class="flex items-center justify-between">
+          <label class="text-gray-300">Mouse Click Navigation</label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="mouseclicknavcheckmark" class="sr-only peer">
+            <div class="w-14 h-8 bg-gray-600 peer-focus:ring-2 peer-focus:ring-purple-500 rounded-full peer peer-checked:after:translate-x-6 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500"></div>
+          </label>
+        </div>
+        <p class="text-gray-500 text-sm">Click left/right screen edges to switch backgrounds (for mouse/Pi touchscreens)</p>
+        <div class="flex items-center justify-between">
           <label class="text-gray-300">Auto Change Background</label>
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="autochangebackgroundcheckmark" class="sr-only peer">
@@ -695,6 +703,9 @@ function populateSettingsValues() {
   // Background settings
   if (user_settings.random_seek) {
     document.getElementById('randomimagecheckmark').checked = true;
+  }
+  if (user_settings.mouseClickNavigation) {
+    document.getElementById('mouseclicknavcheckmark').checked = true;
   }
   if (user_settings.autochangebackground) {
     document.getElementById('autochangebackgroundcheckmark').checked = true;

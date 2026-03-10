@@ -10,7 +10,7 @@ let first_run = true;
 const local_storage_supported = typeof Storage !== "undefined";
 const default_clock_font_size = 4;
 const default_greeting_font_size = 2;
-const app_save_version = 1.5;
+const app_save_version = 1.6;
 const app_version_num = 2;
 let auto_change_background_active = false;
 let auto_change_background_time = 0;
@@ -68,6 +68,8 @@ const UserSettings = class {
     // CRT effect setting
     crt_effect = false,
     crt_opacity = 100,
+    // Mouse click navigation (for Pi touchscreens)
+    mouseClickNavigation = false,
   ) {
     this.version = save_version;
     this.random_seek = random_seek;
@@ -116,6 +118,8 @@ const UserSettings = class {
     // CRT effect setting
     this.crt_effect = crt_effect;
     this.crt_opacity = crt_opacity;
+    // Mouse click navigation
+    this.mouseClickNavigation = mouseClickNavigation;
   }
 };
 
